@@ -1,0 +1,140 @@
+/* TEXT THAT IS GREYED OUT INDICATED A COMMENT IN THE CODE. PLEASE READ THE COMMENTS AS, IN THIS TEMPLATE, THEY ARE NOTES TO YOU ABOUT HOW TO ALTER THIS /PEOPLE CARD IN A WAY THAT WILL REMAIN COMPATIBLE WITH THE COURSE WEBSITE! */
+
+/* Be sure to replace the '#kanyewest' selector with one referring to your partner's name/ID (e.g. '#yourpartner') and add CSS effects for your card here */
+
+#evonPerez .headshot {
+  background-image: url();
+}
+.baseImages {
+    opacity: 0;
+}
+
+
+/*********************************
+***Don't change below this line*** **********************************/
+html {
+    font-size: 1.375em;
+}
+@font-face {
+    font-family: 'Latin Modern Roman';
+    src: url('https://s3.amazonaws.com/dgmde15githubio/lmroman10-regular-webfont.eot');
+    src: url('https://s3.amazonaws.com/dgmde15githubio/lmroman10-regular-webfont.eot?#iefix') format('embedded-opentype'), url('https://s3.amazonaws.com/dgmde15githubio/lmroman10-regular-webfont.woff') format('woff'), url('https://s3.amazonaws.com/dgmde15githubio/lmroman10-regular-webfont.ttf') format('truetype'), url('https://s3.amazonaws.com/dgmde15githubio/lmroman10-regular-webfont.svg#latin_modern_roman10_regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Latin Modern Roman', Georgia, 'Times New Roman', Times, serif;
+    color: #333;
+}
+
+.person {
+    width: calc((70ex - 2*1em)/3);
+    height: calc((70ex - 2*1em)/3);
+    margin-right: 1em;
+    margin-bottom: 1em;
+    float: left;
+}
+.person:first-child, .person:nth-child(3n+1) {
+    margin-left: 0;
+}
+.person:nth-child(3n) {
+    margin-right: 0;
+}
+#people h2 {
+    text-align: center;
+    text-transform: lowercase;
+    font-family: 'Latin Modern Roman', Georgia, 'Times New Roman', Times, serif;
+    font-variant: small-caps;
+    line-height: 1em;
+    font-size: 1.25em;
+    margin-bottom: 0.25em;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 0.5em #000;
+    border-radius: 0.5em;
+}
+.card i.flip {
+    position: absolute;
+    top: 85%;
+}
+/**********************/
+/* front of the cards */
+
+.front.card {
+    background-color: #aaa;
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+.person .headshot {
+    box-shadow: inset 0 0 0.625em #000;
+    width: 6.5em;
+    height: 6.5em;
+    background-size: cover;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 3.75%;
+}
+/*********************/
+/* back of the cards */
+
+.back.card {
+    background-color: #ccc;
+    transform: rotateY(180deg);
+}
+.back ul {
+    padding:0;
+}
+.back li {
+    list-style-type: none;
+    padding-left: 1ex;
+}
+.back li i.fa {
+    margin-right: 1ex;
+}
+#people .back {
+    padding: 0.25em;
+}
+#people .back li {
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    line-height: 0.75em;
+}
+#people .back li a {
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.875em;
+}
+/***********************************/
+/* Flipping behavior for the cards */
+
+i.flip {
+    cursor: pointer;
+    position: relative;
+    top: 5px;
+    left: calc((70ex - 2*1em)/3 - 4.25em);
+}
+.flip-container {
+    perspective: 1000;
+}
+.flip-container.flipped .flipper {
+    transform: rotateY(180deg);
+}
+.flipper {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
