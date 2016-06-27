@@ -3,7 +3,7 @@
 /* Be sure to replace the '#kanyewest' selector with one referring to your partner's name/ID (e.g. '#yourpartner') and add CSS effects for your card here */
 
 #evonPerez .headshot {
-  background-image: url();
+  background-image: url('../img/evon.jpg');
 }
 .baseImages {
     opacity: 0;
