@@ -1,0 +1,31 @@
+body {
+    background-image: url("../img/back.jpg"); /* http://static1.gamespot.com/uploads/scale_super/gamespot/images/2006/317/reviews/764696-931592_20061114_001.jpg */
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.container {
+    margin-top: 25px;
+    margin-bottom: 50px;
+    border: 10px groove saddlebrown;
+    background-image: url("../img/container.jpg"); /* Personal Creation */
+    color: #feffed;
+}
+header {
+    padding: 15px;
+    border-bottom: 5px groove saddlebrown;
+}
+#pageTitle {
+    vertical-align: middle;
+}
+main {
+    padding: 25px;
+}
+footer {
+    border-top: 5px groove saddlebrown;
+    text-align: center;
+}
+.fillArea {
+    height: 100%;
+    width: 100%;
+}

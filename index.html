@@ -9,13 +9,31 @@
 <body>
 <div class="container">
     <header class="row">
-        <div class="col-xs-3"><!-- Placeholder for picture --></div>
-        <div class="col-xs-9">
+        <div class="col-xs-3">
+            <img src="img/header.png"> <!-- Personal Creation -->
+        </div>
+        <div id="pageTitle" class="col-xs-9">
             <h1>DGMD S15 Journal</h1>
         </div>
     </header>
     <main class="row">
         <div class="col-xs-12">
+            <div id="160629" class="row">
+                <div class="col-xs-12">
+                    <h3>June 29th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        Fixed a reference issue for a couple images on my people card.
+                    </p>
+                    <p>
+                        I need to look into Process as a potential application to use for the map, instead of D3.
+                    </p>
+                    <p>
+                        Added formatting to journal
+                    </p>
+                </div>
+            </div>
             <div id="160627" class="row">
                 <div class="col-xs-12">
                     <h3>June 27th</h3>
@@ -32,6 +50,44 @@
                         or to write a quick visual-heavy program for experienced programmers just wanting to have fun. Though
                         the interface is simple, fairly complicated <a href="https://scratch.mit.edu/projects/12352244/">programs</a> are still possible.
                     </p>
+                    <br><br><br><br>
+                    <p>
+                        Continued brainstorming layout and extra-map functionality.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                There will be a control/data box at the bottom of the screen that is split into three sections.
+                                On the left will be a mini map that consistently shows the whole world, even when the main map is
+                                zoomed in. In the primary, central box, the timeline control will reside at the top. Below will be
+                                a space for currently selected civilization data. The rightmost section will contain the name of
+                                the current era (Iron Age, Classical Age, etc.), a top five list of the largest civilizations, and
+                                a "Next Turn" button. Above the control/data box will be a togglable box that display a text summary
+                                of the events of the time period.
+                            </p>
+                            <p>
+                                To the left of the map, event boxes will still drop down as they occur. On hover of
+                                a box, the region of the map where the event occured will be highlighted. On click of a box, a modal
+                                window will appear with a detailed description of the event.
+                            </p>
+                            <p>
+                                To the right of the map, will be a togglable box that displays historical figures as they are alive.
+                                The images will have a border the same color as their culture group. On click, a modal window with
+                                text information about the figure will appear.
+                            </p>
+                            <p>
+                                On the map itself, the current year will display on the top left of the screen. All political regions
+                                will be clickable to update the data in the data box below. Icons representing famous sites/cities
+                                will appear on the map as long as they are in existence. I would like, at some point, to encode
+                                population information on the map, perhaps through color density.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="img/interfaceMockup1.jpg" class="fillArea">
+                            <img src="img/interfaceMockup2.jpg" class="fillArea">
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div id="160626" class="row">
@@ -40,12 +96,48 @@
                 </div>
                 <div class="col-xs-12">
                     <p>
+                        Finalized the color/culture encodings by taking into account similar cultures as well as where each
+                        culture would be on the map throughout history to ensure that there would be no significant visual
+                        issues requiring a further splitting of culture groups. Settled on 16 culture categories, and one
+                        miscellaneous category.
+                    </p>
+                    <p>
+                        Began mentally brainstorming layout concepts. (No physical mockups at this point) Decided to roughly
+                        model the layout/feel on the map interface of Sega's Total War franchise Significant historical events
+                        will fall down as boxes on the left side of the screen: when clicked this boxes will open a modal
+                        window with a description of the event. A togglable box on the right side will display significant
+                        historical figures as they are alive. The bottom of the screen would contain a text summary of the
+                        current time in history.
+                    </p>
+                    <p>
                         Completed people card with the exceptions of verifying Evon's GitHub account name, and fixing the
                         bug that occurs when the user moves the mouse out of the image before the animation chain is complete.
                         The card can be accessed <a href="card/index.html">here</a>.
                     </p>
                     <p>
                         Updated journal page; still need to format it.
+                    </p>
+                </div>
+            </div>
+            <div id="160625" class="row">
+                <div class="col-xs-12">
+                    <h3>June 25th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        Began deciding on color encoding for the different nations in my project. Compared nations from
+                        ancient times to the 1800's to see what consistencies could be leveraged. Determined that six of the
+                        major language family groupings used in McEvedy's Ancient World altas would suffice for European
+                        and near European history. However, due to the prevalance of the Indo-European familily, it will
+                        need to be split into 5-7 additional groups. Includinging five additional major language families
+                        would sufficiently encompase the rest of the world. Major language families with minimal historical
+                        significance will be universally as grey. This creates a total of 15-17 necessary colors.
+                    </p>
+                    <p>
+                        Constructed a modified 4-bit color scheme to get 16 visually distinct colors for use in the map.
+                        Began making some arbitrary color/culture matches, but I will need to improve these pairings.
+                        Similar colors should be assigned to similar cultures to avoid confusions. My synesthetic preferences
+                        won't work here.
                     </p>
                 </div>
             </div>
@@ -87,21 +179,21 @@
 
                     <div class="row">
                         <div class="col-xs-6">
-                            <img src="img/cardIdea1.jpg" height="100%" width="100%">
+                            <img src="img/cardIdea1.jpg" class="fillArea">
                             <caption>
                                 On hover, the background fades to a beach scene and an animated gif of a quantum model
                                 atom drops from above. Then a lightsaber hilt appears in Evon's hand. The lightsaber ignites with audio.
                             </caption>
                         </div>
                         <div class="col-xs-6">
-                            <img src="img/cardIdea2.jpg" height="100%" width="100%">
+                            <img src="img/cardIdea2.jpg" class="fillArea">
                             <caption>
                                 On hover, the background fades to a Matrix-like gif of binary code.
                                 Then a Dunkin Doughnuts coffee cup appears in Evon's hand.
                             </caption>
                         </div>
                         <div class="col-xs-6">
-                            <img src="img/cardIdea3.jpg" height="100%" width="100%">
+                            <img src="img/cardIdea3.jpg" class="fillArea">
                             <caption>
                                 On hover, an alligator appears in the image. An Ironman helmet appears on Evon's head, and
                                 an Ironman arm moves out and fires at the alligator. The alligator disappears from the image.
@@ -134,7 +226,9 @@
         </div>
     </main>
     <footer class="row">
-
+        <div class="col-xs-12">
+            <p>A.J. Kramer</p>
+        </div>
     </footer>
 </div>
 

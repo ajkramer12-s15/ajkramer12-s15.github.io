@@ -27,7 +27,7 @@ imageSpace.mouseover(function(){
     helmet.animate({
       top: '4px'
     }, 1000, function(){
-      helmet.attr('src', 'img/helmetGlow.png');
+      helmet.attr('src', 'http://ajkramer12-s15.github.io/card/img/helmetGlow.png');
       arm.css('opacity', 1);
       arm.animate({
         width: '123px'
