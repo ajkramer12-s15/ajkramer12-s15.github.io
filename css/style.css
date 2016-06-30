@@ -1,3 +1,18 @@
+@font-face {
+    font-family: Cardinal;
+    src: url(../fonts/Cardinal.ttf);
+}
+@font-face {
+    font-family: Imladris;
+    src: url(../fonts/elvencommonspeak.ttf);
+}
+@font-face {
+    font-family: Ringbearer;
+    src: url(../fonts/RINGM__.TTF);
+}
+
+
+
 body {
     background-image: url("../img/back.jpg"); /* http://static1.gamespot.com/uploads/scale_super/gamespot/images/2006/317/reviews/764696-931592_20061114_001.jpg */
     background-size: 100% 100%;
@@ -11,20 +26,45 @@ body {
     background-image: url("../img/container.jpg"); /* Personal Creation */
     color: #feffed;
 }
+
+
 header {
     padding: 15px;
     border-bottom: 5px groove saddlebrown;
 }
 #pageTitle {
+    text-align: center;
     vertical-align: middle;
+    color: #bd0000;
 }
+h1 {
+    font-family: Cardinal;
+}
+h2 {
+    font-family: Imladris;
+}
+.headerRight {
+    text-align: right;
+}
+
+
 main {
     padding: 25px;
 }
+h3 {
+    font-family: Ringbearer;
+    color: #9f0000;
+}
+
+
 footer {
     border-top: 5px groove saddlebrown;
     text-align: center;
 }
+
+
+
+
 .fillArea {
     height: 100%;
     width: 100%;
