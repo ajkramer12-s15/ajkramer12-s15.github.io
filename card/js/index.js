@@ -16,41 +16,43 @@ var blast = $("#evonBlast"); // https://gradingfightscenes.files.wordpress.com/2
 imageSpace.append('<img id="evonGator" class="baseImages" src="http://ajkramer12-s15.github.io/card/img/gator.png" style="position: absolute; left: 150px; top: 55px; opacity: 0; transition: transform 1s;">');
 var gator = $("#evonGator"); // http://www.tybeemarinescience.org/wp-content/uploads/2014/04/Alligator.jpg
 
+var sequenceTriggered = false;
 
 imageSpace.mouseover(function(){
-  console.log("in");
-  gator.css('opacity', 1);
-  gator.animate({
-    left: '100px'
-  }, 1000, function(){
-    helmet.css('opacity', 1);
-    helmet.animate({
-      top: '4px'
-    }, 1000, function(){
-      helmet.attr('src', 'http://ajkramer12-s15.github.io/card/img/helmetGlow.png');
-      arm.css('opacity', 1);
-      arm.animate({
-        width: '123px'
-      }, 1000, function(){
-        blast.animate({
-          opacity: 1
-        }, 500, function() {
-          gator.css('transition', 'opacity 1s, transform 1s');
-          gator.css('transform', 'rotate(100deg)');
-          gator.css('opacity', 0);
-          blast.css('opacity', 0);
-          arm.animate({
-            width: 0
-          }, 1000); // End arm withdraw
-        }); // End blast appear
-      }); // End arm move in
-    }); // End helmet drop down and eye glow
-  }); // End gator move in
-
+  if(!sequenceTriggered) {
+    sequenceTriggered = true;
+    gator.css('opacity', 1);
+    gator.animate({
+      left: '100px'
+    }, 1000, function () {
+      helmet.css('opacity', 1);
+      helmet.animate({
+        top: '4px'
+      }, 1000, function () {
+        helmet.attr('src', 'http://ajkramer12-s15.github.io/card/img/helmetGlow.png');
+        arm.css('opacity', 1);
+        arm.animate({
+          width: '123px'
+        }, 1000, function () {
+          blast.animate({
+            opacity: 1
+          }, 500, function () {
+            gator.css('transition', 'opacity 1s, transform 1s');
+            gator.css('transform', 'rotate(100deg)');
+            gator.css('opacity', 0);
+            blast.css('opacity', 0);
+            arm.animate({
+              width: 0
+            }, 1000); // End arm withdraw
+          }); // End blast appear
+        }); // End arm move in
+      }); // End helmet drop down and eye glow
+    }); // End gator move in
+  }
 
 });
 
-imageSpace.mouseout(function(){
+imageSpace.click(function(){
   console.log("out");
   gator.css({
     transition: 'transform 1s',
@@ -62,7 +64,7 @@ imageSpace.mouseout(function(){
     opacity: 0,
     top: '-70px'
   });
-  helmet.attr('src', 'img/helmet.png');
+  helmet.attr('src', 'http://ajkramer12-s15.github.io/card/img/helmet.png');
 
   arm.css({
     opacity: 0,
@@ -73,11 +75,7 @@ imageSpace.mouseout(function(){
     opacity: 0,
   });
 
-
-
-
-
-
+  sequenceTriggered = false;
 });
 
 // Below this line, you must change the id below ('#kanyewest') to reflect the id you created in the html panel for your partner ('#yourpartner')
