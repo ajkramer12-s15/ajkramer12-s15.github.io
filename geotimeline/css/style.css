@@ -1,0 +1,35 @@
+.container-fluid {
+    padding: 0px;
+}
+.row {
+    margin: 0px;
+    padding: 0px;
+}
+.primaryMapContainer {
+    height: 80vh;
+    width: 100%;
+    padding: 0px;
+    background-color: #333333;
+}
+
+#primaryMap {
+    height: 100%;
+    width: 100%;
+}
+#commandBox {
+    height: 20vh;
+    width: 100%;
+    border-top: 10px groove saddlebrown;
+    border-left: 2px groove saddlebrown;
+    border-right: 2px groove saddlebrown;
+    border-bottom: 2px groove saddlebrown;
+    background-color: #000000;
+    background-image: url(../img/commandBoxBack.jpg);
+}
+#primaryCommand {
+    border-left: 5px groove saddlebrown;
+    border-right: 5px groove saddlebrown;
+}
+.commandBoxElements {
+    height: 100%;
+}
