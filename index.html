@@ -9,19 +9,89 @@
 <body>
 <div class="container">
     <header class="row">
-        <div class="col-xs-3">
-            <img src="img/header.png"> <!-- Personal Creation -->
-        </div>
-        <div id="pageTitle" class="col-xs-6">
-            <h1>DGMD S15 Journal</h1>
-            <h2>Andrew Kramer</h2>
-        </div>
-        <div class="col-xs-3 headerRight">
-            <img src="img/header.png"> <!-- Personal Creation -->
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-3">
+                    <img src="img/header.png"> <!-- Personal Creation -->
+                </div>
+                <div id="pageTitle" class="col-xs-6">
+                    <h1>DGMD S15 Journal</h1>
+                    <h2>Andrew Kramer</h2>
+                </div>
+                <div class="col-xs-3 headerRight">
+                    <img src="img/header.png"> <!-- Personal Creation -->
+                </div>
+            </div>
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <a href="card/index.html">People Card</a>
+                </li>
+                <li>
+                    <a href="geotimeline/index.html">Project</a>
+                </li>
+            </ul>
         </div>
     </header>
     <main class="row">
         <div class="col-xs-12">
+            <div id="160709" class="row">
+                <div class="col-xs-12">
+                    <h3>July 9th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        I couldn't let Google go. I believe I've found a way to make it work by placing each element in
+                        it's own svg tag, and anchoring that tag on the map via lat & long. Essentially, I would have a
+                        Google maps interface with custom overlays, but D3 would be controlling the animation within each
+                        overlay. If necessary, each svg could communicate with the other via global variables in the JS code.
+                        The net effect would appear to be a single animation, when in reality it would be a orchestration
+                        of several simultaneous events. I just need to test to make sure that the position of the polygons
+                        will remain predictable as the perimeters change.
+                    </p>
+                    <p>
+                        I want to have this determined and decided for good no later than Wednesday.
+                    </p>
+                </div>
+            </div>
+            <div id="160706" class="row">
+                <div class="col-xs-12">
+                    <h3>July 6th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        Researched other JS plugins recommended by Bakhtiar. I will likely be using the timeline module
+                        in vis.js for the timeline section of my interface.
+                    </p>
+                    <p>
+                        Began exploring the possibility of using Google Maps as an connected backdrop to the d3 map. This
+                        is likely possible, but there is no straightforward way to do it on the scale that I will be working
+                        on. I will come back to this once more of the base design is complete.
+                    </p>
+                </div>
+            </div>
+            <div id="160701" class="row">
+                <div class="col-xs-12">
+                    <h3>July 1st</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        Tweaked the formatting of the primary interface of my project
+                    </p>
+                    <p>
+                        Began looking at some resources provided by Bakhtiar.
+                    </p>
+                </div>
+            </div>
+            <div id="160630" class="row">
+                <div class="col-xs-12">
+                    <h3>June 30th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        After further research, decided that D3 would be a better fit for my project than Process.
+                    </p>
+                </div>
+            </div>
             <div id="160629" class="row">
                 <div class="col-xs-12">
                     <h3>June 29th</h3>
@@ -35,6 +105,11 @@
                     </p>
                     <p>
                         Added formatting to journal
+                    </p>
+                    <p>
+                        Created the base framework for my project page. Using Bootstrap's grid system, I have a large svg
+                        containing a map of the world as the primary item on the page. Below this is a responsive control
+                        area. Though it does not yet have any functionality attached to it, it has basic visual formatting.
                     </p>
                 </div>
             </div>

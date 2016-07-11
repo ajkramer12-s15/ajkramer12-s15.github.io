@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Demo</title>
+</head>
+<body>
+    <script>
+        var url = '';
+        var farmId;
+        var serverId;
+        var photoId;
+        var secret;
+
+        fetch(url)
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(myJson){
+                    console.log(myJson);
+
+                    var photoNumber = Math.floor(Math.random()*30);
+
+                    farmId = myJson.photos.photo[photoNumber].farm;
+                    serverId = myJson.photos.photo[photoNumber].server;
+                    photoId = myJson.photos.photo[photoNumber].id;
+                    secret = myJson.photos.photo[photoNumber].secret;
+
+                    makeImageFromUrl(makePhotoURL(farmId, serverId, photoId, secret));
+                });
+
+
+
+        function makePhotoURL(farmId, serverId, photoId, secret){
+            return 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '.jpg';
+        }
+
+        function makeImageFromUrl(url) {
+            document.createElement('img');
+            img.setAttribute('src', url);
+            document.body.appendChild(img);
+
+        }
+    </script>
+</body>
+</html>
