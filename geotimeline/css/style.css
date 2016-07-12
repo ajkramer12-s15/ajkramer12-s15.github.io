@@ -15,6 +15,10 @@
 #primaryMap {
     height: 100%;
     width: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: 1;
 }
 #commandBox {
     height: 20vh;
@@ -25,6 +29,9 @@
     border-bottom: 2px groove saddlebrown;
     background-color: #000000;
     background-image: url(../img/commandBoxBack.jpg);
+    position: relative;
+    z-index: 2;
+
 }
 #primaryCommand {
     border-left: 5px groove saddlebrown;

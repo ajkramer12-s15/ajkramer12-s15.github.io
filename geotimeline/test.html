@@ -1,22 +1,91 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBNzTfogg-ylBocZdcO4bU8Uf6iGOBh3qc"></script>
-    <script>
-        function initialize() {
-            var mapProp = {
-                center:new google.maps.LatLng(51.508742,-0.120850),
-                zoom:5,
-                mapTypeId:google.maps.MapTypeId.ROADMAP
-            };
-            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-</head>
+<meta charset="utf-8">
+<style>
 
+    svg {
+        background: #eee;
+    }
+
+    .sphere {
+        fill: #fff;
+    }
+
+    .land {
+        fill: #000;
+    }
+
+    .boundary {
+        fill: none;
+        stroke: #fff;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+        vector-effect: non-scaling-stroke;
+    }
+
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+
+</style>
+<script src="js/d3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
 <body>
-<div id="googleMap" style="width:500px;height:380px;"></div>
-</body>
+<script>
 
-</html>
+    var width = 960,
+            height = 960;
+
+    var projection = d3.geo.mercator()
+            .translate([width / 2, height / 2])
+            .scale((width - 1) / 2 / Math.PI);
+
+    var zoom = d3.behavior.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed);
+
+    var path = d3.geo.path()
+            .projection(projection);
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g");
+
+    var g = svg.append("g");
+
+    svg.append("rect")
+            .attr("class", "overlay")
+            .attr("width", width)
+            .attr("height", height);
+
+    svg
+            .call(zoom)
+            .call(zoom.event);
+
+    d3.json("data/world-110m.json", function(error, world) {
+        if (error) throw error;
+
+        g.append("path")
+                .datum({type: "Sphere"})
+                .attr("class", "sphere")
+                .attr("d", path);
+
+        g.append("path")
+                .datum(topojson.merge(world, world.objects.countries.geometries))
+                .attr("class", "land")
+                .attr("d", path);
+
+        g.append("path")
+                .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+                .attr("class", "boundary")
+                .attr("d", path);
+    });
+
+    function zoomed() {
+        g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+
+    d3.select(self.frameElement).style("height", height + "px");
+
+</script>
