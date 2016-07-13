@@ -1,64 +1,51 @@
-var map
-
-function initialize() {
-    var mapProp = {
-        center:new google.maps.LatLng(30,0),
-        zoom:2,
-        mapTypeId:google.maps.MapTypeId.SATELLITE,
-        disableDefaultUI: true
-    };
-    map=new google.maps.Map(document.getElementById("primaryMapColumn"),mapProp);
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-
-
-
+// Set Global Variables
 var width = d3.select("#primaryMapColumn").style("width").slice(0, -2);
 var height = d3.select("#primaryMapColumn").style("height").slice(0, -2);
-//var latitude = height / 1.53;
 var latitude = height / 2;
 var longitude = width / 2;
 
+var currentZoom = 0;
+var zoomConversionD3 = 163;
+var zoomConversionGoogle = 2
+
+
+// Declare/Initialize map variables
 var primaryMap = d3.select("#primaryMap")
                 .attr("width", width)
                 .attr("height", height)
                 .append("g");
+var googleMap;
+
+
+
+
+/* Constructor Calls & Functions */
+
+// D3
 
 // Set projection path
 var projection = d3.geo.mercator()
     //.translate([width / 2, height / 1.43])
     .center([0, 30])
     .translate([longitude, latitude])
-    .scale(163);
-    //.scale((width - 1) / 2 / Math.PI);
+    .scale(Math.pow(2, currentZoom) * zoomConversionD3);
 
-/*var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 3])
-    .on("zoom", zoomed);
-*/
-
+// Create the map object
 var path = d3.geo.path()
     .projection(projection);
 
-/*primaryMap
-    .call(zoom);
-    //.call(zoom.event);
-*/
+// Load map data
 queue()
     .defer(d3.json, "data/world-110m.json")
-    .await(renderData);
+    .await(initializeD3Map);
 
 
-var miniMap = d3.select("#miniMap")
-    .on("mouseover", travel);
+// Google
+google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
 
-// Render Data
-function renderData(error, mapData) {
+function initializeD3Map(error, mapData) {
 
 
 
@@ -73,38 +60,124 @@ function renderData(error, mapData) {
         .attr("class", "country");
 
 }
-
-function zoomed() {
-    var e = d3.event;
-    //var tx = Math.min(0, Math.max(e.translate[0], width - width * e.scale));
-    //var ty = Math.min(0, Math.max(e.translate[1], height - height * e.scale));
-    var x = e.sourceEvent.x;
-    var y = e.sourceEvent.y;
-    var tx = e.translate[0];
-    var ty = e.translate[1];
-    zoom.translate([tx, ty]);
-
-
-    //primaryMap.attr("transform", "translate(" + [tx, ty] + ")scale(" + e.scale + ")");
-    //projection.center([tx, ty]);
-    //console.log(tx+", "+ty+" | "+ e.scale);
-    //console.log(projection.center());
-    console.log(projection.invert([x, y]));
-    //console.log(x + " " + y);
-    longitude = tx;
-    latitude = ty;
+function initializeGoogleMap() {
+    var mapProp = {
+        center:new google.maps.LatLng(30,0),
+        zoom: currentZoom + zoomConversionGoogle,
+        mapTypeId:google.maps.MapTypeId.SATELLITE,
+        disableDefaultUI: true
+    };
+    googleMap=new google.maps.Map(document.getElementById("primaryMapColumn"),mapProp);
 }
 
-function travel(){
-    var pCenter = projection.center();
-    projection.center([pCenter[0]-10,pCenter[1]]);
-    console.log(projection.center());
 
+
+
+
+
+/* User Triggers & Functions */
+var zoomLock = false;
+var zoomInterval = 200;
+
+d3.select("body").on("wheel.zoom", function(){
+    if(!zoomLock) {
+        zoomLock = true;
+        var zoomDelta = d3.event.wheelDeltaY;
+        zoom(zoomDelta);
+        setTimeout(function(){zoomLock = false;}, zoomInterval * 3);
+    }
+});
+
+
+var panUpTriggerTimeout;
+var panRightTriggerTimeout;
+var panDownTriggerTimeout;
+var panLeftTriggerTimeout;
+
+var panUpTrigger = d3.select("#panUpTrigger")
+    .on("mouseover", function(){panUpTrigger.style("opacity", "0.5"); panUpTriggerTimeout = setInterval(function(){travel(0);}, 100);})
+    .on("mouseout", function(){panUpTrigger.style("opacity", "0.2"); clearTimeout(panUpTriggerTimeout);});
+var panRightTrigger = d3.select("#panRightTrigger")
+    .on("mouseover", function(){panRightTrigger.style("opacity", "0.5"); panRightTriggerTimeout = setInterval(function(){travel(1);}, 100);})
+    .on("mouseout", function(){panRightTrigger.style("opacity", "0.2"); clearTimeout(panRightTriggerTimeout);});
+var panDownTrigger = d3.select("#panDownTrigger")
+    .on("mouseover", function(){panDownTrigger.style("opacity", "0.5"); panDownTriggerTimeout = setInterval(function(){travel(2);}, 100);})
+    .on("mouseout", function(){panDownTrigger.style("opacity", "0.2"); clearTimeout(panDownTriggerTimeout);});
+var panLeftTrigger = d3.select("#panLeftTrigger")
+    .on("mouseover", function(){panLeftTrigger.style("opacity", "0.5"); panLeftTriggerTimeout = setInterval(function(){travel(3);}, 100);})
+    .on("mouseout", function(){panLeftTrigger.style("opacity", "0.2"); clearTimeout(panLeftTriggerTimeout);});
+
+
+
+
+function zoom(direction) {
+
+    if(direction > 0 && currentZoom < 2){
+        currentZoom++;
+        projection.scale(Math.pow(2, currentZoom) * zoomConversionD3);
+        googleMap.setZoom(currentZoom + zoomConversionGoogle);
+    }
+    if(direction < 0 && currentZoom > 0){
+        currentZoom--;
+        projection.scale(Math.pow(2, currentZoom) * zoomConversionD3);
+        googleMap.setZoom(currentZoom + zoomConversionGoogle);
+    }
+
+    primaryMap.selectAll("path")
+        .transition()
+        .duration(zoomInterval)
+        .attr("d", path);
+
+    if(currentZoom == 0){
+        projection.center([0,30]);
+        googleMap.setCenter({lat: 30, lng: 0});
+        primaryMap.selectAll("path")
+            .transition()
+            .duration(0)
+            .attr("d", path);
+
+        d3.selectAll(".panTrigger")
+            .classed("hidden", true);
+    } else {
+        d3.selectAll(".panTrigger")
+            .classed("hidden", false);
+    }
+}
+
+/**
+*** Move both the Google Map and the D3 map when a travel trigger is received
+**/
+function travel(direction){
+    // Get current map center coordinates
+    var pCenter = projection.center();
+
+    // Calculate new map center coordinates & update D3 projection & Google Map position
+    switch(direction){
+        case 0: if(pCenter[1] < 70) {
+                    projection.center([pCenter[0], pCenter[1] + 10]);
+                    googleMap.setCenter({lat: pCenter[1] + 10, lng: pCenter[0]});
+                }
+                break;
+        case 1: if(pCenter[0] < 180) {
+                    projection.center([pCenter[0]+10,pCenter[1]]);
+                    googleMap.setCenter({lat: pCenter[1], lng: pCenter[0]+10});
+                }
+                break;
+        case 2: if(pCenter[1] > -70) {
+                    projection.center([pCenter[0], pCenter[1] - 10]);
+                    googleMap.setCenter({lat: pCenter[1] - 10, lng: pCenter[0]});
+                }
+                break;
+        case 3: if(pCenter[0] > -180) {
+                    projection.center([pCenter[0] - 10, pCenter[1]]);
+                    googleMap.setCenter({lat: pCenter[1], lng: pCenter[0] - 10});
+                }
+                break;
+    }
+
+    // Update D3 map position
     primaryMap.selectAll("path")
         .transition()
         .duration(0)
         .attr("d", path);
-
-    var translate = projection.translate();
-    map.setCenter({lat: pCenter[1], lng: pCenter[0]-10});
 }

@@ -1,14 +1,15 @@
 .container-fluid {
-    padding: 0px;
+    padding: 0;
 }
 .row {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 .primaryMapContainer {
     height: 80vh;
     width: 100%;
-    padding: 0px;
+    position: relative;
+    padding: 0;
     background-color: #333333;
 }
 
@@ -20,6 +21,42 @@
     left:0;
     z-index: 1;
 }
+
+.panTrigger {
+    position: absolute;
+    z-index: 2;
+    padding: 0;
+    background-color: #cccccc;
+    opacity: 0.2;
+}
+#panUpTrigger {
+    height: 14px;
+    width: 100vw;
+    top: 0;
+    left: 0;
+}
+#panRightTrigger {
+    height: 80vh;
+    width: 14px;
+    top: 0;
+    right: 0;
+}
+#panDownTrigger {
+    height: 14px;
+    width: 100vw;
+    bottom: 0;
+    left:0;
+}
+#panLeftTrigger {
+    height: 80vh;
+    width: 14px;
+    top:0;
+    left:0;
+}
+
+
+
+
 #commandBox {
     height: 20vh;
     width: 100%;
