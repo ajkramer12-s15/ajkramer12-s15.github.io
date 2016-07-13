@@ -1,4 +1,10 @@
-// Set Global Variables
+/***
+**** Primary Map
+****/
+
+
+
+// Set Primary Attributes
 var width = d3.select("#primaryMapColumn").style("width").slice(0, -2);
 var height = d3.select("#primaryMapColumn").style("height").slice(0, -2);
 var latitude = height / 2;
@@ -180,4 +186,59 @@ function travel(direction){
         .transition()
         .duration(0)
         .attr("d", path);
+}
+
+
+
+
+
+
+
+/***
+ **** Mini Map
+ ****/
+
+
+
+// Set Primary Attributes
+var miniWidth = d3.select("#miniMapColumn").style("width").slice(0, -2);
+var miniHeight = d3.select("#miniMapColumn").style("height").slice(0, -2);
+var miniMapCenterY = miniHeight / 2;
+var miniMapCenterX = miniWidth / 2;
+
+
+// Initialize map variable
+var miniMap = d3.select("#miniMap")
+    .attr("width", miniWidth)
+    .attr("height", miniHeight)
+    .append("g");
+
+
+// Set projection path
+var miniProjection = d3.geo.mercator()
+    .center([30, 0])
+    .translate([miniMapCenterX, miniMapCenterY])
+    .scale(33);
+
+// Create the map object
+var miniMapBase = d3.geo.path()
+    .projection(miniProjection);
+
+// Load map data
+queue()
+    .defer(d3.json, "data/world-110m.json")
+    .await(initializeMiniMap);
+
+function initializeMiniMap(error, mapData) {
+
+    // Convert TopoJSON to GeoJSON (target object = 'countries')
+    var world = topojson.feature(mapData, mapData.objects.countries).features;
+
+    // Render map
+    miniMap.selectAll("path")
+        .data(world)
+        .enter().append("path")
+        .attr("d", miniMapBase)
+        .attr("class", "country");
+
 }

@@ -34,16 +34,45 @@
     </header>
     <main class="row">
         <div class="col-xs-12">
+            <div id="160713" class="row">
+                <div class="col-xs-12">
+                    <h3>July 13th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        Completed initial navigation in all four compass directions using arrow regions on the borders of
+                        the window as affordances (Bennett's idea). Terminable continuous scrolling achieved through the
+                        use of setInterval and clearInterval on mouseover and mouseout, respectively. Constraints set on
+                        the pan amount to prevent going off of the map.
+                    </p>
+                    <p>
+                        Zoom function completed. Google does not allow for granular zooming, so I attached a function to
+                        the mouse wheel that sensed the direction of rotation and increased or decreased the zoom level
+                        to one of three zoom amounts (defined by Google). Used setTimeout and boolean zoomLock variable
+                        to decrease the sensitivity of the zoom, and allow time for the smooth transition effect. Created
+                        a conversion formula to automatically calculate the appropriate scale for the D3 map. Disabled
+                        panning on full zoom out.
+                    </p>
+                    <p>
+                        Began working on the minimap in the lower-left corner of the screen.
+                    </p>
+                    <p>
+                        I would like to have the complete framework (Minus a few superficial design elements) complete
+                        before Monday so that I can begin working on data integration next week.
+                    </p>
+                </div>
+            </div>
             <div id="160711" class="row">
                 <div class="col-xs-12">
                     <h3>July 11th</h3>
                 </div>
                 <div class="col-xs-12">
                     <p>
-                        Worked
-                    </p>
-                    <p>
-
+                        Struggled to perform animations on the test svg I created in Google Maps. Google does not allow
+                        for referencing of an svg once it has been created. After talking with Alec, I went back to the
+                        original idea of having a single svg overlayed on Google. Completed simultaneous map movement in
+                        on direction when triggered by an arbitrary mouseover event. Proof of concept complete; now it's
+                        on the real coding
                     </p>
                 </div>
             </div>

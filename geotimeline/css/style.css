@@ -1,3 +1,9 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
 .container-fluid {
     padding: 0;
 }
@@ -70,10 +76,20 @@
     z-index: 2;
 
 }
+#miniMapColumn {
+    padding: 15px 6px 5px 6px;
+}
 #primaryCommand {
     border-left: 5px groove saddlebrown;
     border-right: 5px groove saddlebrown;
 }
 .commandBoxElements {
     height: 100%;
+}
+
+
+
+#miniMap {
+    z-index: 3;
+    fill: #ffffff;
 }
