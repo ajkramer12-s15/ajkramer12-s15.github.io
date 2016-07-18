@@ -24,6 +24,8 @@
     var targetG;
     var targetB;
 
+    var keyLock = false;
+
     function generateInput() {
         // Write your code here! This function can do anything you want, but should ultimately return the value you want to affect the page's background color. Right now, it is just returning a random number between 0 and 1.
         if(inputR > 0){
@@ -52,33 +54,37 @@
     }
     generateGoal();
     // Finally, the background is changed every 1 seconds (or 1000 milliseconds).
-    setInterval(changeBackgroundColor, 100);
+    var timer = setInterval(changeBackgroundColor, 100);
 
     window.addEventListener("keypress", function(e){
-        if(inputR < 255){
-            inputR = inputR + 7;
-        }
-        if(inputG < 255) {
-            inputG = inputG + 7;
-        }
-        if(inputB < 255) {
-            inputB = inputB + 7;
+        if(!keyLock){
+            if(inputR < 255){
+                inputR = inputR + 7;
+            }
+            if(inputG < 255) {
+                inputG = inputG + 7;
+            }
+            if(inputB < 255) {
+                inputB = inputB + 7;
+            }
+
+            var keyCode = e.keyCode;
+            if(keyCode == 114 && inputR < 255){
+                inputR = inputR + 7;
+            }
+            if(keyCode == 103 && inputG < 255){
+                inputG = inputG + 7;
+            }
+            if(keyCode == 98 && inputB < 255){
+                inputB = inputB + 7;
+            }
+            keyLock = true;
+            updateOutput();
         }
 
-        console.log(e);
-        var keyCode = e.keyCode;
-        if(keyCode == 114 && inputR < 255){
-            inputR = inputR + 7;
-        }
-        if(keyCode == 103 && inputG < 255){
-            inputG = inputG + 7;
-        }
-        if(keyCode == 98 && inputB < 255){
-            inputB = inputB + 7;
-        }
-
-        updateOutput();
-
+    });
+    window.addEventListener("keyup", function(){
+        keyLock = false;
     });
 
 
@@ -97,8 +103,9 @@
     }
 
     function checkGoal(){
-        if(targetR >= inputR-50 && targetR <= inputR+50 && targetG >= inputG-50 && targetG <= inputG+50 && targetB >= inputB-50 && targetB <= inputB+50){
-            document.getElementById("message").innerHTML = "Success!";
+        if(targetR >= inputR-10 && targetR <= inputR+10 && targetG >= inputG-10 && targetG <= inputG+10 && targetB >= inputB-10 && targetB <= inputB+10){
+            document.getElementById("message").innerHTML = "<h1>Success!</h1>";
+            clearInterval(timer);
         }
     }
 </script>
