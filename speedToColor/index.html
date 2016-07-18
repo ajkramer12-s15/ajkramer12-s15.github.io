@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input > Background Color</title>
+    <style>
+        body {
+            transition:1s;
+            background-color:pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="message"></div>
+    <div id="r"></div>
+    <div id="g"></div>
+    <div id="b"></div>
+<script>
+    // This global variable will make the current value of "input" accessible ANYWHERE in your program.
+    var inputR = 255;
+    var inputG = 255;
+    var inputB = 255;
+
+    var targetR;
+    var targetG;
+    var targetB;
+
+    function generateInput() {
+        // Write your code here! This function can do anything you want, but should ultimately return the value you want to affect the page's background color. Right now, it is just returning a random number between 0 and 1.
+        if(inputR > 0){
+            inputR = inputR - 5;
+        }
+        if(inputG > 0){
+            inputG = inputG - 5;
+        }
+        if(inputB > 0){
+            inputB = inputB - 5;
+        }
+
+        updateOutput();
+        //console.log(input);
+        //return input;
+    }
+    // This is the function that will actually change the background color.
+    function changeBackgroundColor() {
+        // First it uses the current input value to choose a (grayscale) background color for the page using the CSS rgb() color setting, which expects a number between 0 and 255 for each of a red, green, and blu values.
+        document.body.style.backgroundColor = "rgb(" + Math.floor(inputR) + "," + Math.floor(inputG) + "," + Math.floor(inputB) + ")";
+
+        checkGoal();
+
+        // Then, it generates a new input number by running our generateInput function.
+        generateInput();
+    }
+    generateGoal();
+    // Finally, the background is changed every 1 seconds (or 1000 milliseconds).
+    setInterval(changeBackgroundColor, 100);
+
+    window.addEventListener("keypress", function(e){
+        if(inputR < 255){
+            inputR = inputR + 7;
+        }
+        if(inputG < 255) {
+            inputG = inputG + 7;
+        }
+        if(inputB < 255) {
+            inputB = inputB + 7;
+        }
+
+        console.log(e);
+        var keyCode = e.keyCode;
+        if(keyCode == 114 && inputR < 255){
+            inputR = inputR + 7;
+        }
+        if(keyCode == 103 && inputG < 255){
+            inputG = inputG + 7;
+        }
+        if(keyCode == 98 && inputB < 255){
+            inputB = inputB + 7;
+        }
+
+        updateOutput();
+
+    });
+
+
+
+    function updateOutput(){
+        document.getElementById("r").innerHTML = "R:" + Math.floor(inputR);
+        document.getElementById("g").innerHTML = "G:" + Math.floor(inputG);
+        document.getElementById("b").innerHTML = "B:" + Math.floor(inputB);
+    }
+    function generateGoal(){
+        targetR = Math.floor(Math.random()*255);
+        targetG = Math.floor(Math.random()*255);
+        targetB = Math.floor(Math.random()*255);
+
+        document.getElementById("message").innerHTML = "<h3>Create the color R:" + targetR + " G:" + targetG + " B:" + targetB + ".</h3>";
+    }
+
+    function checkGoal(){
+        if(targetR >= inputR-50 && targetR <= inputR+50 && targetG >= inputG-50 && targetG <= inputG+50 && targetB >= inputB-50 && targetB <= inputB+50){
+            document.getElementById("message").innerHTML = "Success!";
+        }
+    }
+</script>
+
+</body>
+</html>

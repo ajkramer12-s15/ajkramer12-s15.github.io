@@ -73,7 +73,7 @@ html, body {
     background-color: #000000;
     background-image: url(../img/commandBoxBack.jpg);
     position: relative;
-    z-index: 2;
+    z-index: 3;
 
 }
 #miniMapColumn {
@@ -90,6 +90,16 @@ html, body {
 
 
 #miniMap {
-    z-index: 3;
+    z-index: 4;
     fill: #ffffbb;
+}
+
+#eraSummaryBox {
+    height: 15vh;
+    width: 200px;
+    position: absolute;
+    top
+    background-color: red;
+
+    z-index: 3;
 }
