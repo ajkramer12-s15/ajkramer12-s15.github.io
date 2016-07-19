@@ -1,3 +1,12 @@
+/* Values */
+@font-face {
+    font-family: Cardinal;
+    src: url(../fonts/Cardinal.ttf);
+}
+
+/*
+** Page Styling
+*/
 html, body {
     margin: 0;
     height: 100%;
@@ -11,6 +20,11 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+
+/*
+** Primary Map Styling
+*/
 .primaryMapContainer {
     height: 80vh;
     width: 100%;
@@ -62,7 +76,9 @@ html, body {
 
 
 
-
+/*
+** Command Box Styling
+*/
 #commandBox {
     height: 20vh;
     width: 100%;
@@ -73,33 +89,106 @@ html, body {
     background-color: #000000;
     background-image: url(../img/commandBoxBack.jpg);
     position: relative;
-    z-index: 3;
+    z-index: 4;
+    box-shadow: 0 0 20px black;
 
 }
+
 #miniMapColumn {
     padding: 15px 0 5px 0;
 }
+#miniMap {
+    z-index: 5;
+    fill: #ffffbb;
+}
+
 #primaryCommand {
     border-left: 5px groove saddlebrown;
     border-right: 5px groove saddlebrown;
 }
+
 .commandBoxElements {
     height: 100%;
 }
 
 
 
-#miniMap {
-    z-index: 4;
-    fill: #ffffbb;
+
+
+
+
+/*
+** Summary Box Styling
+*/
+#eraSummaryBox {
+    position: absolute;
+    border-top: 8px groove saddlebrown;
+    border-left: 8px groove saddlebrown;
+    border-right: 8px groove saddlebrown;
+    border-bottom: 0;
+    background-color: #000000;
+    background-image: url(../img/commandBoxBack.jpg);
+    box-shadow: 0 0 20px black;
+    z-index: 3;
+}
+#eraSummaryBoxToggle {
+    position: relative;
+    top: -23px;
+    height: 15px;
+    width: 40px;
+    border-top: 1px groove saddlebrown;
+    border-left: 1px groove saddlebrown;
+    border-right: 1px groove saddlebrown;
+    border-bottom: 0;
+    background-color: #2d1606;
+    background: linear-gradient(#100600, #2d1606);
+    box-shadow: 0 0 20px black;
+    z-index: 3;
+    text-align: center;
 }
 
-#eraSummaryBox {
-    height: 15vh;
-    width: 200px;
+#characterSummaryBox {
     position: absolute;
-    top
-    background-color: red;
-
+    border-top: 5px groove saddlebrown;
+    border-left: 5px groove saddlebrown;
+    border-right: 0;
+    border-bottom: 5px groove saddlebrown;
+    background-color: #000000;
+    background-image: url(../img/commandBoxBack.jpg);
+    box-shadow: 0 0 20px black;
     z-index: 3;
+}
+#characterSummaryBoxToggle {
+    position: relative;
+    left: -17px;
+    height: 40px;
+    width: 15px;
+    border-top: 1px groove saddlebrown;
+    border-left: 1px groove saddlebrown;
+    border-right: 0;
+    border-bottom: 1px groove saddlebrown;
+    background-color: #2d1606;
+    background: linear-gradient(to right, #100600, #2d1606);
+    box-shadow: 0 0 20px black;
+    z-index: 3;
+}
+
+
+
+/*
+** Other Styling
+*/
+#eraDate {
+    position: absolute;
+    top: 3vh;
+    left: 3vh;
+    font-family: "Cardinal", serif;
+    font-size: 300%;
+    color: #DAA520;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5),
+        1px 2px 3px #CA9510,
+        2px 4px 4px rgba(0,0,0,0.25),
+        3px 6px 6px rgba(0,0,0,0.2),
+        4px 8px 8px rgba(0,0,0,1);
+    z-index: 5;
 }

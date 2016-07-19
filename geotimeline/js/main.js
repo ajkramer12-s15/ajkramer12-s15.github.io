@@ -5,10 +5,10 @@
 
 
 // Set Primary Attributes
-var width = d3.select("#primaryMapColumn").style("width").slice(0, -2);
-var height = d3.select("#primaryMapColumn").style("height").slice(0, -2);
-var latitude = height / 2;
-var longitude = width / 2;
+var primaryMapWidth = d3.select("#primaryMapColumn").style("width").slice(0, -2);
+var primaryMapHeight = d3.select("#primaryMapColumn").style("height").slice(0, -2);
+var latitude = primaryMapHeight / 2;
+var longitude = primaryMapWidth / 2;
 
 var currentZoom = 0;
 var zoomConversionD3 = 163;
@@ -17,8 +17,8 @@ var zoomConversionGoogle = 2;
 
 // Declare/Initialize map variables
 var primaryMap = d3.select("#primaryMap")
-                .attr("width", width)
-                .attr("height", height)
+                .attr("width", primaryMapWidth)
+                .attr("height", primaryMapHeight)
                 .append("g");
 var googleMap;
 
@@ -31,7 +31,7 @@ var googleMap;
 
 // Set projection path
 var projection = d3.geo.mercator()
-    //.translate([width / 2, height / 1.43])
+    //.translate([primaryMapWidth / 2, primaryMapHeight / 1.43])
     .center([0, 30])
     .translate([longitude, latitude])
     .scale(Math.pow(2, currentZoom) * zoomConversionD3);
@@ -142,10 +142,10 @@ function zoom(direction) {
     viewBox
         .transition()
         .duration(500)
-        .attr("x", miniProjection(projection.center())[0] - width * miniMapSizeConversion/2)
-        .attr("y", miniProjection(projection.center())[1] - height * miniMapSizeConversion/2)
-        .attr("width", width * miniMapSizeConversion)
-        .attr("height", height * miniMapSizeConversion);
+        .attr("x", miniProjection(projection.center())[0] - primaryMapWidth * miniMapSizeConversion/2)
+        .attr("y", miniProjection(projection.center())[1] - primaryMapHeight * miniMapSizeConversion/2)
+        .attr("width", primaryMapWidth * miniMapSizeConversion)
+        .attr("height", primaryMapHeight * miniMapSizeConversion);
 
 
     if(currentZoom == 0){
@@ -219,10 +219,10 @@ function travel(direction){
     //Redraw minimap viewbox
     miniMapSizeConversion = miniProjection.scale()/projection.scale();
     viewBox
-        .attr("x", miniProjection(projection.center())[0] - width * miniMapSizeConversion/2)
-        .attr("y", miniProjection(projection.center())[1] - height * miniMapSizeConversion/2)
-        .attr("width", width * miniMapSizeConversion)
-        .attr("height", height * miniMapSizeConversion);
+        .attr("x", miniProjection(projection.center())[0] - primaryMapWidth * miniMapSizeConversion/2)
+        .attr("y", miniProjection(projection.center())[1] - primaryMapHeight * miniMapSizeConversion/2)
+        .attr("width", primaryMapWidth * miniMapSizeConversion)
+        .attr("height", primaryMapHeight * miniMapSizeConversion);
 }
 
 
@@ -292,10 +292,10 @@ function initializeMiniMap(error, mapData) {
 
     viewBox = miniMap.append("rect")
         .attr("id", "viewBox")
-        .attr("x", miniProjection(projection.center())[0] - width * miniMapSizeConversion/2)
-        .attr("y", miniProjection(projection.center())[1] - height * miniMapSizeConversion/2)
-        .attr("width", width * miniMapSizeConversion)
-        .attr("height", height * miniMapSizeConversion)
+        .attr("x", miniProjection(projection.center())[0] - primaryMapWidth * miniMapSizeConversion/2)
+        .attr("y", miniProjection(projection.center())[1] - primaryMapHeight * miniMapSizeConversion/2)
+        .attr("width", primaryMapWidth * miniMapSizeConversion)
+        .attr("height", primaryMapHeight * miniMapSizeConversion)
         .attr("fill", "none")
         .attr("stroke-width", 2)
         .attr("stroke", "none")
@@ -321,4 +321,113 @@ function viewBoxDragRelease() {
         .transition()
         .duration(0)
         .attr("d", path);
+}
+
+
+
+
+/***
+ **** Summary Boxes
+ ****/
+
+/*
+ ** Era Summary Box
+ **/
+var eraSummaryBoxOpen = false;
+var eraSummaryBoxWidth = d3.select("#primaryCommand").style("width").slice(0, -2) * 0.95;
+var eraSummaryBoxOffset = parseInt(d3.select("#miniMapColumn").style("width").slice(0, -2)) + (eraSummaryBoxWidth * 0.025);
+
+    console.log(eraSummaryBoxOffset);
+
+// Initialize Era Summary Box
+var eraSummaryBox = d3.select("#eraSummaryBox")
+    .style("width", eraSummaryBoxWidth + "px")
+    .style("height", "15vh")
+    .style("top", primaryMapHeight + "px")
+    .style("left", eraSummaryBoxOffset + "px");
+
+
+var eraSummaryBoxHeight = eraSummaryBox.style("height").slice(0, -2);
+
+var eraSummaryBoxToggle = d3.select("#eraSummaryBoxToggle")
+    .style("left", eraSummaryBoxWidth/2-(d3.select("#eraSummaryBoxToggle").style("width").slice(0, -2)/2) + "px")
+    .on("click", function(){
+        if(eraSummaryBoxOpen){
+            eraSummaryBox
+                .transition()
+                .duration(1500)
+                .style("top", primaryMapHeight + "px");
+            setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-up'></span>");}, 1500);
+            eraSummaryBoxOpen = false;
+        } else {
+            eraSummaryBox
+                .transition()
+                .duration(1500)
+                .style("top", (primaryMapHeight - eraSummaryBoxHeight) + "px");
+            setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-down'></span>");}, 1500);
+            eraSummaryBoxOpen = true;
+        }
+
+    });
+
+
+/*
+ ** Character Summary Boxes
+ **/
+var characterSummaryBoxOpen = false;
+var characterSummaryBoxHeight = primaryMapHeight * 0.95;
+var characterSummaryBoxOffset = primaryMapHeight * 0.025;
+
+console.log(characterSummaryBoxOffset);
+
+// Initialize Character Summary Box
+var characterSummaryBox = d3.select("#characterSummaryBox")
+    .style("width", "10vw")
+    .style("height", characterSummaryBoxHeight + "px")
+    .style("top", characterSummaryBoxOffset + "px")
+    .style("left", primaryMapWidth-5 + "px");
+
+
+var characterSummaryBoxWidth = characterSummaryBox.style("width").slice(0, -2);
+
+var characterSummaryBoxToggle = d3.select("#characterSummaryBoxToggle")
+    .style("top", characterSummaryBoxHeight/2-(d3.select("#characterSummaryBoxToggle").style("height").slice(0, -2)/2) + "px")
+    .on("click", function(){
+        if(characterSummaryBoxOpen){
+            characterSummaryBox
+                .transition()
+                .duration(1500)
+                .style("left", primaryMapWidth-5 + "px");
+            setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-left'></span>");}, 1500);
+            characterSummaryBoxOpen = false;
+        } else {
+            characterSummaryBox
+                .transition()
+                .duration(1500)
+                .style("left", (primaryMapWidth - characterSummaryBoxWidth) + "px");
+            setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-right'></span>");}, 1500);
+            characterSummaryBoxOpen = true;
+        }
+
+    });
+
+
+
+
+
+
+
+
+/***
+ **** Dynamic Era Information
+ ****/
+
+var eraDate = d3.select("#eraDate");
+
+// Initialize stats
+updateEraDate();
+
+
+function updateEraDate(){
+    eraDate.text("200AD");
 }
