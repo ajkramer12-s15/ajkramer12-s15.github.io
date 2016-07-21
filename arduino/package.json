@@ -1,0 +1,16 @@
+{
+  "name": "arduino-sensor-demo",
+  "version": "0.0.1",
+  "description": "A small example of polling a sensor value from an Arduino and changing something on a web page with it",
+  "main": "arduino.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "johnny-five": "^0.9.60"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}

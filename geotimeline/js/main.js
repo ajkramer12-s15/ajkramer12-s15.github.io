@@ -2,6 +2,10 @@
 **** Primary Map
 ****/
 
+// Declare Map Data Variables
+var world;
+var currentEraBoundaries;
+var test;
 
 
 // Set Primary Attributes
@@ -43,6 +47,7 @@ var path = d3.geo.path()
 // Load map data
 queue()
     .defer(d3.json, "data/world-110m.json")
+    .defer(d3.json, "data/testData.json")
     .await(initializeD3Map);
 
 
@@ -51,19 +56,20 @@ google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
 
-function initializeD3Map(error, mapData) {
-
-
+function initializeD3Map(error, mapData, testData) {
 
     // Convert TopoJSON to GeoJSON (target object = 'countries')
-    var world = topojson.feature(mapData, mapData.objects.countries).features;
+    world = topojson.feature(mapData, mapData.objects.countries).features;
+    currentEraBoundaries = testData.features;
+    console.log(world);
+    console.log(currentEraBoundaries);
 
     // Render map
     primaryMap.selectAll("path")
-        .data(world)
+        .data(currentEraBoundaries)
         .enter().append("path")
         .attr("d", path)
-        .attr("class", "country");
+        .attr("class", "primaryMapRegion");
 
 }
 function initializeGoogleMap() {
@@ -429,5 +435,17 @@ updateEraDate();
 
 
 function updateEraDate(){
-    eraDate.text("200AD");
+    eraDate.text("AD 362");
 }
+
+
+d3.select("#statsBox")
+    .on("click", function(){
+        currentEraBoundaries.features[0].geometry.coordinates[0] = world[0].geometry.coordinates[0];
+
+        // Redraw map
+        primaryMap.selectAll("path")
+            .transition()
+            .duration(1000)
+            .attr("d", path);
+    });

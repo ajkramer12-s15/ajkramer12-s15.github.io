@@ -41,6 +41,11 @@ html, body {
     left:0;
     z-index: 1;
 }
+.primaryMapRegion {
+    fill: red;
+    opacity: .5;
+    stroke: black;
+}
 
 .panTrigger {
     position: absolute;
