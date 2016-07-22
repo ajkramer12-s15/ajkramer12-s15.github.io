@@ -82,6 +82,71 @@ html, body {
 
 
 /*
+** Primary Map Region Styling
+*/
+.primaryMapRegion{
+    opacity: 0.5;
+}
+.conquered {
+    opacity: 0;
+}
+.altaian {
+    fill: #985906;
+}
+.uralian {
+    fill: #ffffff;
+}
+.celtic {
+    fill: #ff9933;
+}
+.classical {
+    fill: #ff6600;
+}
+.iranian {
+    fill: #ffff00;
+}
+.slavic {
+    fill: #000000;
+}
+.teutonic {
+    fill: #b40000;
+}
+.westernEuropean {
+    fill: #ff1301;
+}
+.elamoDravidian {
+    fill: #92D050;
+}
+.afroAsiatic {
+    fill: #019104;
+}
+.nigerCongolese {
+    fill: #000000;
+}
+.bantu {
+    fill: #000000;
+}
+.sinoThai {
+    fill: #000000;
+}
+.austronesian {
+    fill: #000000;
+}
+.papuanAustralian {
+    fill: #000000;
+}
+.americanIndian {
+    fill: #000000;
+}
+.misc {
+    fill: #808080;
+}
+
+
+
+
+
+/*
 ** Command Box Styling
 */
 #commandBox {

@@ -1,0 +1,42 @@
+id,name,culture
+0,Jutes,teutonic
+1,Angles,teutonic
+2,Frisians,teutonic
+3,Franks,teutonic
+4,Saxons,teutonic
+5,Lombards,teutonic
+6,Burgundians,teutonic
+7,Thuringians,teutonic
+8,Alemanni,teutonic
+9,Marco-manni,teutonic
+10,Siling Vandals,teutonic
+11,Quadi,teutonic
+12,Asding Vandals,teutonic
+13,Gepids,teutonic
+14,Rugians,teutonic
+15,Visgoths,teutonic
+16,Ostrogoths,teutonic
+17,Danes,teutonic
+18,Getes,teutonic
+19,Swedes,teutonic
+20,Norse,teutonic
+21,Lapps,uralian
+22,Finns,uralian
+23,Balts,slavic
+24,Slavs,slavic
+25,Roman Empire,classical
+26,Picts,celtic
+27,Irish,celtic
+28,Abasgians,misc
+29,Kingdom of Lazica,misc
+30,Kingdom of Iberia,misc
+31,Kingdom of Armenia,misc
+32,Berbers,afroAsiatic
+33,Arabs,afroAsiatic
+34,Persian Empire,iranian
+35,Alans,iranian
+36,Kushan Principalities,iranian
+37,Huns,altaian
+38,British,celtic
+39,Suevi & Vandals,teutonic
+40,White Huns,altaian

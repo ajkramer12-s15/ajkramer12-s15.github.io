@@ -5,7 +5,8 @@
 // Declare Map Data Variables
 var world;
 var currentEraBoundaries;
-var test;
+var nextEraBoundaries;
+var nationTable;
 
 
 // Set Primary Attributes
@@ -17,6 +18,8 @@ var longitude = primaryMapWidth / 2;
 var currentZoom = 0;
 var zoomConversionD3 = 163;
 var zoomConversionGoogle = 2;
+
+var eraChangeDuration = 10000;
 
 
 // Declare/Initialize map variables
@@ -46,8 +49,9 @@ var path = d3.geo.path()
 
 // Load map data
 queue()
-    .defer(d3.json, "data/world-110m.json")
-    .defer(d3.json, "data/testData.json")
+    .defer(d3.csv, "data/nationTable.csv")
+    .defer(d3.json, "data/ad362.json")
+    .defer(d3.json, "data/ad406.json")
     .await(initializeD3Map);
 
 
@@ -56,20 +60,20 @@ google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
 
-function initializeD3Map(error, mapData, testData) {
+function initializeD3Map(error, nationData, currentMapData, nextMapData) {
 
-    // Convert TopoJSON to GeoJSON (target object = 'countries')
-    world = topojson.feature(mapData, mapData.objects.countries).features;
-    currentEraBoundaries = testData.features;
-    console.log(world);
-    console.log(currentEraBoundaries);
+    nationTable = nationData;
+
+    currentEraBoundaries = currentMapData.features;
+    nextEraBoundaries = nextMapData.features;
 
     // Render map
     primaryMap.selectAll("path")
         .data(currentEraBoundaries)
         .enter().append("path")
         .attr("d", path)
-        .attr("class", "primaryMapRegion");
+        .attr("id", function(d){ return "region" + d.id;})
+        .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture});
 
 }
 function initializeGoogleMap() {
@@ -343,7 +347,6 @@ var eraSummaryBoxOpen = false;
 var eraSummaryBoxWidth = d3.select("#primaryCommand").style("width").slice(0, -2) * 0.95;
 var eraSummaryBoxOffset = parseInt(d3.select("#miniMapColumn").style("width").slice(0, -2)) + (eraSummaryBoxWidth * 0.025);
 
-    console.log(eraSummaryBoxOffset);
 
 // Initialize Era Summary Box
 var eraSummaryBox = d3.select("#eraSummaryBox")
@@ -384,7 +387,6 @@ var characterSummaryBoxOpen = false;
 var characterSummaryBoxHeight = primaryMapHeight * 0.95;
 var characterSummaryBoxOffset = primaryMapHeight * 0.025;
 
-console.log(characterSummaryBoxOffset);
 
 // Initialize Character Summary Box
 var characterSummaryBox = d3.select("#characterSummaryBox")
@@ -428,24 +430,73 @@ var characterSummaryBoxToggle = d3.select("#characterSummaryBoxToggle")
  **** Dynamic Era Information
  ****/
 
-var eraDate = d3.select("#eraDate");
+var eraDateSpan = d3.select("#eraDate");
 
 // Initialize stats
-updateEraDate();
+updateEraDate("AD 362");
 
-
-function updateEraDate(){
-    eraDate.text("AD 362");
-}
 
 
 d3.select("#statsBox")
-    .on("click", function(){
-        currentEraBoundaries.features[0].geometry.coordinates[0] = world[0].geometry.coordinates[0];
+    .on("click", function(){updateEra("AD 406");});
 
-        // Redraw map
-        primaryMap.selectAll("path")
-            .transition()
-            .duration(1000)
-            .attr("d", path);
-    });
+
+function updateEra(eraDate){
+    updateEraDate(eraDate);
+    updateEraMap();
+
+}
+
+function updateEraDate(eraDate){
+    eraDateSpan.text(eraDate);
+}
+
+
+function updateEraMap(){
+    var i, j;
+    var found = false;
+
+    for(i=0; i < currentEraBoundaries.length; i++){
+        for(j=0; j < nextEraBoundaries.length && !found; j++){
+            if(currentEraBoundaries[i].id == nextEraBoundaries[j].id){
+                currentEraBoundaries[i].geometry.coordinates[0] = nextEraBoundaries[j].geometry.coordinates[0];
+                found = true;
+            }
+        }
+        if(!found){
+            d3.select("#region"+currentEraBoundaries[i].id)
+                //.transition()
+                //.duration(eraChangeDuration)
+                .attr("class", "conquered");
+        }
+        found = false;
+    }
+
+    for(i=0; i < nextEraBoundaries.length; i++){
+        for(j=0; j < currentEraBoundaries.length && !found; j++){
+            if(nextEraBoundaries[i].id == currentEraBoundaries[j].id){
+                found = true;
+            }
+        }
+        if(!found){
+            currentEraBoundaries.push(nextEraBoundaries[i]);
+            primaryMap.selectAll("path")
+                .data(currentEraBoundaries)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("id", function(d){ return "region" + d.id;})
+                .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture})
+                .style("opacity","0");
+        }
+        found = false;
+    }
+
+
+
+    // Redraw map
+    primaryMap.selectAll("path:not(.conquered)")
+        .transition()
+        .duration(eraChangeDuration)
+        .attr("d", path)
+        .style("opacity", "0.5");
+}
