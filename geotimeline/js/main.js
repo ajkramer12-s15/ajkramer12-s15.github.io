@@ -4,6 +4,7 @@
 
 // Declare Map Data Variables
 var world;
+var previousEraBoundaries;
 var currentEraBoundaries;
 var nextEraBoundaries;
 var nationTable;
@@ -19,7 +20,7 @@ var currentZoom = 0;
 var zoomConversionD3 = 163;
 var zoomConversionGoogle = 2;
 
-var eraChangeDuration = 10000;
+var eraChangeDuration = 5000;
 
 
 // Declare/Initialize map variables
@@ -64,8 +65,8 @@ function initializeD3Map(error, nationData, currentMapData, nextMapData) {
 
     nationTable = nationData;
 
-    currentEraBoundaries = currentMapData.features;
-    nextEraBoundaries = nextMapData.features;
+    currentEraBoundaries = homogenizeNodeCount(currentMapData.features);
+    nextEraBoundaries = homogenizeNodeCount(nextMapData.features);
 
     // Render map
     primaryMap.selectAll("path")
@@ -74,6 +75,56 @@ function initializeD3Map(error, nationData, currentMapData, nextMapData) {
         .attr("d", path)
         .attr("id", function(d){ return "region" + d.id;})
         .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture});
+
+    labelRegions();
+
+}
+function homogenizeNodeCount(mapData){
+
+    var homogenizedMapData = mapData;
+
+    for(var region = 0; region < mapData.length; region++){
+        var regionData = mapData[region].geometry.coordinates[0];
+        var currentRegionNodeNumber = regionData.length;
+        var targetRegionNodeNumber = nationTable[mapData[region].id].nodes;
+        var homogenizedRegionData = regionData;
+        if(targetRegionNodeNumber > currentRegionNodeNumber){
+            var startingNode = regionData = mapData[region].geometry.coordinates[0][0];
+            for(var node = 0; node < targetRegionNodeNumber - currentRegionNodeNumber; node++){
+                homogenizedRegionData.push(startingNode);
+            }
+            homogenizedMapData[region].geometry.coordinates[0] = homogenizedRegionData;
+        }
+        //console.log(homogenizedMapData[region].id + ": " + (targetRegionNodeNumber - homogenizedMapData[region].geometry.coordinates[0].length));
+    }
+
+    return homogenizedMapData;
+}
+function labelRegions(){
+    var allCurrentRegions = d3.selectAll(".primaryMapRegion");
+    console.log(allCurrentRegions);
+
+
+    primaryMap.selectAll(".regionLabel")
+        .data(currentEraBoundaries)
+        .enter().append("text")
+        .attr("id", function(d){ return "region" + d.id;})
+        .attr("class", "regionLabel")
+        .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+        .text(function(d){ return nationTable[d.id].name; });
+
+
+    /*for(var i = 0; i < allCurrentRegions[0].length; i++){
+        d3.select("#primaryMap")
+            .append("text")
+              .attr("class", "regionLabel")
+              .attr("x",6)
+              .attr("y", 28)
+            .append("textPath")
+              .attr("class", "textpath")
+              .attr("xlink:href", function(){return "#" + allCurrentRegions[0][i].id;})
+              .text(function(){return nationTable[allCurrentRegions[0][i].id.slice(6)].name;});
+    }*/
 
 }
 function initializeGoogleMap() {
@@ -444,7 +495,12 @@ d3.select("#statsBox")
 function updateEra(eraDate){
     updateEraDate(eraDate);
     updateEraMap();
+    labelRegions();
 
+    previousEraBoundaries = currentEraBoundaries;
+    currentEraBoundaries = previousEraBoundaries;
+    nextEraBoundaries = d3.json("data/ad420.json");
+    nextEraBoundaries = homogenizeNodeCount(nextEraBoundaries.features);
 }
 
 function updateEraDate(eraDate){
@@ -459,15 +515,25 @@ function updateEraMap(){
     for(i=0; i < currentEraBoundaries.length; i++){
         for(j=0; j < nextEraBoundaries.length && !found; j++){
             if(currentEraBoundaries[i].id == nextEraBoundaries[j].id){
+
+                /* This won't work here because the data is already homogenized, but I need it to work somewhere to test
+                ** for conquered nations.
+
+                if(nextEraBoundaries[j].geometry.coordinates[0].length == 3){
+                    d3.select("#region"+currentEraBoundaries[i].id)
+                        .classed("conquered", true);
+                }
+                */
                 currentEraBoundaries[i].geometry.coordinates[0] = nextEraBoundaries[j].geometry.coordinates[0];
                 found = true;
             }
         }
         if(!found){
             d3.select("#region"+currentEraBoundaries[i].id)
-                //.transition()
-                //.duration(eraChangeDuration)
-                .attr("class", "conquered");
+                .classed("transitioned", true)
+                .transition()
+                .duration(eraChangeDuration)
+                .style("opacity", 0);
         }
         found = false;
     }
@@ -494,7 +560,7 @@ function updateEraMap(){
 
 
     // Redraw map
-    primaryMap.selectAll("path:not(.conquered)")
+    primaryMap.selectAll("path:not(.transitioned)")
         .transition()
         .duration(eraChangeDuration)
         .attr("d", path)

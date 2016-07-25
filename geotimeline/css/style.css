@@ -88,7 +88,10 @@ html, body {
     opacity: 0.5;
 }
 .conquered {
-    opacity: 0;
+   /* opacity: 0;*/
+}
+.transitioned {
+    /* opacity: 0;*/
 }
 .altaian {
     fill: #985906;
@@ -107,6 +110,7 @@ html, body {
 }
 .slavic {
     fill: #000000;
+    stroke: #666666;
 }
 .teutonic {
     fill: #b40000;
