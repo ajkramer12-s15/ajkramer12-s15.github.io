@@ -3,6 +3,26 @@
     font-family: Cardinal;
     src: url(../fonts/Cardinal.ttf);
 }
+@font-face {
+    font-family: Camelot;
+    src: url(../fonts/CamelotDeNada.ttf);
+}
+@font-face {
+    font-family: Charlemagne;
+    src: url(../fonts/CharlemagneStd-Bold.otf);
+}
+@font-face {
+    font-family: Constantia;
+    src: url(../fonts/constan.ttf);
+}
+@font-face {
+    font-family: Constantia-bold;
+    src: url(../fonts/constanb.ttf);
+}
+@font-face {
+    font-family: Roman;
+    src: url(../fonts/TT1139M_.TTF);
+}
 
 /*
 ** Page Styling
@@ -10,7 +30,8 @@
 html, body {
     margin: 0;
     height: 100%;
-    overflow: hidden
+    overflow: hidden;
+    font-family: "Constantia", serif;
 }
 
 .container-fluid {
@@ -122,7 +143,7 @@ html, body {
     fill: #92D050;
 }
 .afroAsiatic {
-    fill: #019104;
+    fill: #016704;
 }
 .nigerCongolese {
     fill: #000000;
@@ -147,6 +168,17 @@ html, body {
 }
 
 
+/*
+** Primary Map Label Styling
+*/
+.regionLabel{
+    font-family: "Roman", serif;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5),
+    1px 1px 1px #999999,
+    2px 2px 2px rgba(0,0,0,0.25),
+    3px 3px 4px rgba(0,0,0,0.2),
+    4px 4px 5px rgba(0,0,0,1);
+}
 
 
 
@@ -165,6 +197,7 @@ html, body {
     position: relative;
     z-index: 4;
     box-shadow: 0 0 20px black;
+    color: #ddddbb;
 
 }
 
@@ -185,6 +218,26 @@ html, body {
     height: 100%;
 }
 
+#grandEraLabel {
+    margin: 1vh 0 1vh 0;
+    font-family: "Charlemagne", serif;
+    font-size: 3vh;
+    background: radial-gradient(#aaaaaa, #333333, #dddddd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#nationRankingHeader {
+    margin: 0 0 0.5vh 0;
+    font-size: 1.5vh;
+    font-family: "Constantia-bold", serif;
+    background: radial-gradient(#ddddbb, #bbbbbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#nationRankingList {
+    margin: 0 0 0.5vh 0;
+    font-size: 1.5vh;
+}
 
 
 
@@ -219,6 +272,10 @@ html, body {
     box-shadow: 0 0 20px black;
     z-index: 3;
     text-align: center;
+}
+#eraSummary{
+    margin: 0 10px 5px 10px;
+    color: #ddddbb;
 }
 
 #characterSummaryBox {

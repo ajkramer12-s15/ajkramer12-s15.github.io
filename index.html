@@ -34,6 +34,110 @@
     </header>
     <main class="row">
         <div class="col-xs-12">
+            <div id="160725" class="row">
+                <div class="col-xs-12">
+                    <h3>July 25th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        I was exposed the Reveal.js today. I think my PowerPoint application is going to get lonely.
+                    </p>
+                    <p>
+                        Alec is going to look into a solution for the disconnected D3 path issue. I completed the region
+                        labeling code, using a logarithm and path.area to scale the label size based on region size. I also
+                        set the update function to check each proposed font size against a threshold to prevent small labels
+                        from being displayed and cluttering up the view area. I need to create a tooltip for the resulting
+                        non-labeled regions. I added a button to control the era change.
+                    </p>
+                    <p>
+                        Added dynamically generated largest nation statistics based on path area and whether or not the
+                        region represents an actual nation or just a general area of loosely associated peoples (based on
+                        a value I added to each nation in the nation table.)
+                    </p>
+                    <p>
+                        Created an era table to store era-specific information such as era date, json filename, and era
+                        description. Modified the json loading process to use information from this table, and to
+                        automatically adjust which file needs to be loaded as the era's progress. Now, when I create a
+                        new era all I have to do is add a new row to this table, and the JavaScript does the rest.
+                    </p>
+                    <p>
+                        Now the era description toggle box pulls the description from the era table. I just need to add
+                        the content.
+                    </p>
+                    <div>
+                        <p>My current tentative goals schedule is as follows:</p>
+                        <ul>
+                            <li>Wednesday: Events code complete</li>
+                            <li>Thursday: Character code complete</li>
+                            <li>Friday: Region details code complete</li>
+                            <li>Sunday: Complete data for current regions</li>
+                            <li>Monday: Add another era</li>
+                            <li>Tuesday: Finalize and ready presentation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="160724" class="row">
+                <div class="col-xs-12">
+                    <h3>July 24th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        I fixed two of the three problems with the transition: To fix the node increase issue, I wrote a
+                        homogenizeNodes function that runs on each GeoJSON file as it is loaded. It compares the number
+                        of nodes in a region to the max nodes as listed the region csv file. If the current number of
+                        nodes is lower than that max, it artificially adds enough nodes stacked on top of the other at
+                        the beginning of the path to make up the difference. This worked nicely to fix the the issue,
+                        though now there is a bit of an "unscrolling" effect if the difference in nodes is large.
+                        Eventually, I will fix this by dispersing the artificial nodes throughout the path. The opacity
+                        issue was essentially a typo, and I will postpone fixing the disconnected paths issue until after
+                        the class.
+                    </p>
+                    <p>
+                        I added rudimentary region labels.
+                    </p>
+                </div>
+            </div>
+            <div id="160721" class="row">
+                <div class="col-xs-12">
+                    <h3>July 21st</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                        I created the next set of region paths (Greater Europe, AD406), and began working on the transition
+                        between the eras. I chose to load the data for each era as a separate JSON file to conserve RAM usage.
+                        At any given time, no more than three era's worth of data will be loaded: the current era, and the
+                        next and previous eras for delay-free transitions. Once an era changes, the era data shifts down
+                        (previous is overwritten by current, current is overwritten by next, and next loads the next dataset.)
+                    </p>
+                    <p>
+                        I got the transition working effectively; however, there are three primary issues: if a path is
+                        transitioning to a larger number of nodes, the new nodes appear immediately at the new location;
+                        also, the regions disconnect during transition; finally, when a region is conquered the opacity
+                        decreases to 0 immediately instead of following the transition duration.
+                    </p>
+                </div>
+            </div>
+            <div id="160720" class="row">
+                <div class="col-xs-12">
+                    <h3>July 20th</h3>
+                </div>
+                <div class="col-xs-12">
+                    <p>
+                         I realized that I will not be able to use the few coordinate files that I created a few years
+                        ago in Google Earth. The coordinates are saved in two completely different formats, and it would
+                        be faster to recreate them directly as GeoJSON that to write code to convert the format. In addition,
+                        the coordinate paths were much lower resolution than I remembered.
+                    </p>
+                    <p>
+                        I found a great website to graphically generate GeoJSON files:
+                        <a href="https://google-developers.appspot.com/maps/documentation/utils/geojson/">Simple GeoJSON Editor</a>.
+                        I used this platform to create the first set of region paths for my project (Greater Europe, AD362),
+                        and replaced my placeholder D3 world map with this map. Rather than storing all region data in the
+                        paths themselves, I am using the path ids to link to a csv file with region name and culture coding.
+                    </p>
+                </div>
+            </div>
             <div id="160718" class="row">
                 <div class="col-xs-12">
                     <h3>July 18th</h3>

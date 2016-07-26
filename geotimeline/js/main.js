@@ -1,13 +1,16 @@
 /***
 **** Primary Map
 ****/
-
 // Declare Map Data Variables
+var nationTable;
+var eraTable;
+var currentEra = 0;
+
+// Declare Map Path Variables
 var world;
 var previousEraBoundaries;
 var currentEraBoundaries;
 var nextEraBoundaries;
-var nationTable;
 
 
 // Set Primary Attributes
@@ -19,8 +22,14 @@ var longitude = primaryMapWidth / 2;
 var currentZoom = 0;
 var zoomConversionD3 = 163;
 var zoomConversionGoogle = 2;
+var fontThreshold = 15;
 
 var eraChangeDuration = 5000;
+
+
+// Declare Stat Variables
+var eraDateSpan = d3.select("#eraDate");
+var largestRegions = [{name: "test", size: 0},{name: "test", size: 0},{name: "test", size: 0},{name: "test", size: 0},{name: "test", size: 0}];
 
 
 // Declare/Initialize map variables
@@ -51,20 +60,49 @@ var path = d3.geo.path()
 // Load map data
 queue()
     .defer(d3.csv, "data/nationTable.csv")
-    .defer(d3.json, "data/ad362.json")
-    .defer(d3.json, "data/ad406.json")
-    .await(initializeD3Map);
+    .defer(d3.tsv, "data/eraTable.tsv")
+    .await(loadInitialMapData);
 
 
 // Google
 google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
-
-function initializeD3Map(error, nationData, currentMapData, nextMapData) {
-
+function loadInitialMapData(error, nationData, eraData){
     nationTable = nationData;
+    eraTable = eraData;
+    updateEraDate();
+    updateEraSummary();
 
+
+    queue()
+        .defer(d3.json, "data/" + getJsonFilename(-1) + ".json")
+        .defer(d3.json, "data/" + getJsonFilename(0) + ".json")
+        .defer(d3.json, "data/" + getJsonFilename(1) + ".json")
+        .await(initializeD3Map);
+}
+function getJsonFilename(direction){
+    switch(direction){
+        case -1: if(currentEra == 0){
+                    return eraTable[currentEra].filename;
+                } else {
+                    return eraTable[currentEra-1].filename;
+                }
+                break;
+        case 0: return eraTable[currentEra].filename;
+                break;
+        case 1: if(currentEra == eraTable.length-1){
+                    return eraTable[currentEra].filename;
+                } else {
+                    return eraTable[currentEra+1].filename;
+                }
+                break;
+        default: return eraTable[currentEra].filename;
+    }
+}
+function initializeD3Map(error, previousMapData, currentMapData, nextMapData) {
+
+    previousEraBoundaries = homogenizeNodeCount(previousMapData.features);
     currentEraBoundaries = homogenizeNodeCount(currentMapData.features);
     nextEraBoundaries = homogenizeNodeCount(nextMapData.features);
 
@@ -76,7 +114,8 @@ function initializeD3Map(error, nationData, currentMapData, nextMapData) {
         .attr("id", function(d){ return "region" + d.id;})
         .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture});
 
-    labelRegions();
+    labelRegions(0);
+    calculateRegionAreas();
 
 }
 function homogenizeNodeCount(mapData){
@@ -100,33 +139,39 @@ function homogenizeNodeCount(mapData){
 
     return homogenizedMapData;
 }
-function labelRegions(){
-    var allCurrentRegions = d3.selectAll(".primaryMapRegion");
-    console.log(allCurrentRegions);
+function labelRegions(duration){
 
+    // Data Join
+    var currentLabels = primaryMap.selectAll(".regionLabel")
+        .data(currentEraBoundaries);
 
-    primaryMap.selectAll(".regionLabel")
-        .data(currentEraBoundaries)
+    currentLabels
         .enter().append("text")
-        .attr("id", function(d){ return "region" + d.id;})
-        .attr("class", "regionLabel")
-        .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-        .text(function(d){ return nationTable[d.id].name; });
+        .attr("class", "regionLabel");
 
+    currentLabels
+        .attr("id", function(d){ return "label" + d.id;})
+        .text(function(d){ return nationTable[d.id].name; })
+        .transition()
+        .duration(duration)
+        .attr("transform", function(d) {
+            var textWidth = d3.select("#label"+ d.id)[0][0].clientWidth;
+            return "translate(" + (path.centroid(d)[0]-textWidth/2) + "," + path.centroid(d)[1] + ")";
+        })
+        .attr("font-size", function(d){
+            var regionArea = path.area(d);
+            var fontSize = Math.floor(Math.log(regionArea))*2;
+            if(path.area(d) > 0 && fontSize >= (fontThreshold)){
+                return (Math.floor(Math.log(regionArea))*2) + "px";
+            } else {
+                return "0";
+            }
+        });
 
-    /*for(var i = 0; i < allCurrentRegions[0].length; i++){
-        d3.select("#primaryMap")
-            .append("text")
-              .attr("class", "regionLabel")
-              .attr("x",6)
-              .attr("y", 28)
-            .append("textPath")
-              .attr("class", "textpath")
-              .attr("xlink:href", function(){return "#" + allCurrentRegions[0][i].id;})
-              .text(function(){return nationTable[allCurrentRegions[0][i].id.slice(6)].name;});
-    }*/
-
+    currentLabels.exit().remove();
 }
+
+
 function initializeGoogleMap() {
     var mapProp = {
         center:new google.maps.LatLng(30,0),
@@ -193,10 +238,7 @@ function zoom(direction) {
     }
 
     // Redraw map
-    primaryMap.selectAll("path")
-        .transition()
-        .duration(zoomInterval)
-        .attr("d", path);
+    updateMap(zoomInterval);
 
     //Redraw minimap viewbox
     miniMapSizeConversion = miniProjection.scale()/projection.scale();
@@ -212,10 +254,7 @@ function zoom(direction) {
     if(currentZoom == 0){
         projection.center([0,30]);
         googleMap.setCenter({lat: 30, lng: 0});
-        primaryMap.selectAll("path")
-            .transition()
-            .duration(0)
-            .attr("d", path);
+        updateMap(0);
 
         // Disable primary map navigation
         d3.selectAll(".panTrigger")
@@ -272,10 +311,7 @@ function travel(direction){
     }
 
     // Update D3 map position
-    primaryMap.selectAll("path")
-        .transition()
-        .duration(0)
-        .attr("d", path);
+    updateMap(0);
 
     //Redraw minimap viewbox
     miniMapSizeConversion = miniProjection.scale()/projection.scale();
@@ -284,6 +320,13 @@ function travel(direction){
         .attr("y", miniProjection(projection.center())[1] - primaryMapHeight * miniMapSizeConversion/2)
         .attr("width", primaryMapWidth * miniMapSizeConversion)
         .attr("height", primaryMapHeight * miniMapSizeConversion);
+}
+function updateMap(duration){
+    primaryMap.selectAll("path")
+        .transition()
+        .duration(duration)
+        .attr("d", path);
+    labelRegions(duration);
 }
 
 
@@ -378,10 +421,88 @@ function viewBoxDragRelease() {
     projection.center(vCenter);
     googleMap.setCenter({lat: vCenter[1], lng: vCenter[0]});
     // Update D3 map position
-    primaryMap.selectAll("path")
-        .transition()
-        .duration(0)
-        .attr("d", path);
+    updateMap(0);
+}
+
+
+
+
+/*
+ ** Stats Box
+ **/
+d3.select("#statsBox")
+    .append("img")
+    .attr("id", "nextArrow")
+    .attr("src", "img/nextArrow.png") // http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/antique-glowing-copper-orbs-icons-media/001362-antique-glowing-copper-orb-icon-media-a-media22-arrow-forward1.png
+    .style("position", "absolute")
+    .style("top", "10px")
+    .style("right", "10px")
+    .style("height", "25%");
+
+// Called in initialize map and update era
+function calculateRegionAreas(){
+    for(var i = 0; i < 5; i++){
+        largestRegions[i].size = 0;
+    }
+
+    currentEraBoundaries.forEach(function(d){
+        var regionSize = path.area(d);
+        if(regionSize > largestRegions[0].size && nationTable[d.id].nation == 1){
+
+            largestRegions[4].name = largestRegions[3].name;
+            largestRegions[4].size = largestRegions[3].size;
+
+            largestRegions[3].name = largestRegions[2].name;
+            largestRegions[3].size = largestRegions[2].size;
+
+            largestRegions[2].name = largestRegions[1].name;
+            largestRegions[2].size = largestRegions[1].size;
+
+            largestRegions[1].name = largestRegions[0].name;
+            largestRegions[1].size = largestRegions[0].size;
+
+            largestRegions[0].name = nationTable[d.id].name;
+            largestRegions[0].size = regionSize;
+
+        } else if(regionSize > largestRegions[1].size && nationTable[d.id].nation == 1){
+            largestRegions[4].name = largestRegions[3].name;
+            largestRegions[4].size = largestRegions[3].size;
+
+            largestRegions[3].name = largestRegions[2].name;
+            largestRegions[3].size = largestRegions[2].size;
+
+            largestRegions[2].name = largestRegions[1].name;
+            largestRegions[2].size = largestRegions[1].size;
+
+            largestRegions[1].name = nationTable[d.id].name;
+            largestRegions[1].size = regionSize;
+
+        } else if(regionSize > largestRegions[2].size && nationTable[d.id].nation == 1){
+            largestRegions[4].name = largestRegions[3].name;
+            largestRegions[4].size = largestRegions[3].size;
+
+            largestRegions[3].name = largestRegions[2].name;
+            largestRegions[3].size = largestRegions[2].size;
+
+            largestRegions[2].name = nationTable[d.id].name;
+            largestRegions[2].size = regionSize;
+
+        } else if(regionSize > largestRegions[3].size && nationTable[d.id].nation == 1){
+            largestRegions[4].name = largestRegions[3].name;
+            largestRegions[4].size = largestRegions[3].size;
+
+            largestRegions[3].name = nationTable[d.id].name;
+            largestRegions[3].size = regionSize;
+
+        } else if(regionSize > largestRegions[4].size && nationTable[d.id].nation == 1){
+            largestRegions[4].name = nationTable[d.id].name;
+            largestRegions[4].size = regionSize;
+        }
+
+        for(i = 0; i < 5; i++){
+            d3.select("#nationSize" + i).text(largestRegions[i].name);
+        }
+    });
 }
 
 
@@ -480,31 +601,37 @@ var characterSummaryBoxToggle = d3.select("#characterSummaryBoxToggle")
 /***
  **** Dynamic Era Information
  ****/
-
-var eraDateSpan = d3.select("#eraDate");
-
-// Initialize stats
-updateEraDate("AD 362");
+d3.select("#nextArrow")
+    .on("click", function(){updateEra();});
 
 
+function updateEra(){
 
-d3.select("#statsBox")
-    .on("click", function(){updateEra("AD 406");});
-
-
-function updateEra(eraDate){
-    updateEraDate(eraDate);
     updateEraMap();
-    labelRegions();
+    setTimeout(calculateRegionAreas, eraChangeDuration);
 
     previousEraBoundaries = currentEraBoundaries;
     currentEraBoundaries = previousEraBoundaries;
-    nextEraBoundaries = d3.json("data/ad420.json");
+    queue()
+        .defer(d3.json, "data/" + getJsonFilename(1) + ".json")
+        .await(updateEraWrapup);
+
+    currentEra++;
+
+    updateEraDate();
+    updateEraSummary();
+
+}
+function updateEraWrapup(error, nextData){
+    nextEraBoundaries = nextData;
     nextEraBoundaries = homogenizeNodeCount(nextEraBoundaries.features);
 }
 
-function updateEraDate(eraDate){
-    eraDateSpan.text(eraDate);
+function updateEraDate(){
+    eraDateSpan.text(eraTable[currentEra].date);
+}
+function updateEraSummary(){
+    d3.select("#eraSummary").text(eraTable[currentEra].summary);
 }
 
 
@@ -565,4 +692,6 @@ function updateEraMap(){
         .duration(eraChangeDuration)
         .attr("d", path)
         .style("opacity", "0.5");
+    labelRegions(eraChangeDuration);
+
 }
