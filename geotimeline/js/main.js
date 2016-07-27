@@ -4,6 +4,7 @@
 // Declare Map Data Variables
 var nationTable;
 var eraTable;
+var eventTable;
 var currentEra = 0;
 
 // Declare Map Path Variables
@@ -61,6 +62,7 @@ var path = d3.geo.path()
 queue()
     .defer(d3.csv, "data/nationTable.csv")
     .defer(d3.tsv, "data/eraTable.tsv")
+    .defer(d3.tsv, "data/eventTable.tsv")
     .await(loadInitialMapData);
 
 
@@ -68,9 +70,10 @@ queue()
 google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
-function loadInitialMapData(error, nationData, eraData){
+function loadInitialMapData(error, nationData, eraData, eventData){
     nationTable = nationData;
     eraTable = eraData;
+    eventTable = eventData;
     updateEraDate();
     updateEraSummary();
 
@@ -614,15 +617,17 @@ function updateEra(){
     currentEraBoundaries = previousEraBoundaries;
     queue()
         .defer(d3.json, "data/" + getJsonFilename(1) + ".json")
-        .await(updateEraWrapup);
+        .await(updateEraMapWrapup);
 
     currentEra++;
 
     updateEraDate();
     updateEraSummary();
+    triggerEvents();
+
 
 }
-function updateEraWrapup(error, nextData){
+function updateEraMapWrapup(error, nextData){
     nextEraBoundaries = nextData;
     nextEraBoundaries = homogenizeNodeCount(nextEraBoundaries.features);
 }
@@ -694,4 +699,37 @@ function updateEraMap(){
         .style("opacity", "0.5");
     labelRegions(eraChangeDuration);
 
+}
+
+function triggerEvents(){
+
+    var eventCount = 0;
+
+    for(var i = 0; i < eventTable.length && eventTable[i].era <= currentEra; i++){
+        if(eventTable[i].era == currentEra){
+            eventCount++;
+            var eventData = eventTable[i];
+            var event = d3.select("#pageContainer").append("div")
+                .attr("id", function(){ return "event" + eventData.id;})
+                .attr("class", function(){return "eventNotification " + eventData.type + "event " + "eventCount" + eventCount;})
+                .style("height", "8vh")
+                .style("width", "8vh")
+                .style("top", "-100px")
+                .style("left", "0.5vh");
+
+            event
+                .transition()
+                .delay((eventCount-1)*(eraChangeDuration/10))
+                .duration(eraChangeDuration/1.5)
+                .ease("linear")
+                .style("top", function(){
+                    console.log(80 - 8*eventCount);
+                    return (80 - 8*eventCount)+"vh"
+                });
+        }
+    }
+
+
+    var events = d3.selectAll(".eventNotification")[0];
+    console.log(events);
 }
