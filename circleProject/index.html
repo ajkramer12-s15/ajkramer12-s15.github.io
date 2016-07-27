@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project</title>
+</head>
+<body>
+    <style>
+        .circle {
+            border-radius: 50%;
+            background-color: red;
+            float: left;
+        }
+        .label {
+            position: relative;
+        }
+    </style>
+    <script>
+        window.addEventListener("keypress", function(e){
+            var found = false;
+            document.querySelectorAll("div").forEach(function(data){
+               if(e.keyCode == data.id.slice(6)){
+                   updateCircle(data.id);
+                   found = true;
+               }
+            });
+
+            if(!found){
+                createCircle(e.keyCode);
+            }
+        });
+
+
+
+        function createCircle(character){
+            console.log(character);
+
+            var circle = document.createElement("div");
+            circle.setAttribute("id", "circle"+character);
+            circle.setAttribute('class', "circle");
+            circle.setAttribute("style", "backgroundColor: a; height: 1px; width: 1px; ");
+            circle.setAttribute("data-counter", "0");
+            circle.innerHTML = "<div class='label' style='top: 50px; left: 50px; font-size: 0'>" + String.fromCharCode(character) + "</div>";
+            document.body.appendChild(circle);
+        }
+
+
+        function updateCircle(circleId){
+            var currentCircle = document.querySelector('#'+ circleId);
+            // var radius = currentCircle.style.height.slice(0,-2);
+            var count = currentCircle.getAttribute('data-counter');
+
+            console.log(count);
+            if(count < 9){
+                var radius = Math.pow(2, count);
+                var fontPosition = Math.pow(2, count-1);
+                console.log(radius);
+                currentCircle.style.height = radius + "px";
+                currentCircle.style.width = radius + "px";
+                currentCircle.childNodes[0].style.fontSize = Math.floor(radius/10) + "px";
+                currentCircle.childNodes[0].style.top = (Math.floor(radius/2) - Math.floor(radius/10)/2) + "px";
+                currentCircle.childNodes[0].style.left = (Math.floor(radius/2)) + "px";
+            }
+
+            count++;
+            currentCircle.setAttribute('data-counter', count);
+        }
+    </script>
+</body>
+</html>
