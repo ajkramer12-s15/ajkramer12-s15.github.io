@@ -328,6 +328,37 @@ html, body {
 .eventNotification{
     position: absolute;
     background-color: black;
-    border: 1px solid red;
+    border: 4px groove grey;
     z-index: 4;
+}
+
+
+#eventWindow {
+    background-color: palegoldenrod;
+    background-image: url("../img/eventWindowBackground.jpg"); /* Personal Creation */
+    background-size: cover;
+}
+#eventWindowClose {
+    text-align: right;
+}
+#eventWindowCloseButton {
+    height: 5vh;
+    width: 5vh;
+}
+#eventWindowImage {
+    margin: 0 12% 25px 12%;
+    background-color: #0f0703;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#eventWindowTitle {
+    margin: 0 10% 10px 10%;
+    text-align: center;
+    font-family: "Cardinal", serif;
+    font-size: xx-large;
+}
+#eventWindowDescription {
+    margin: 0 10% 0 10%;
+    font-size: large;
 }

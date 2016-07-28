@@ -702,6 +702,7 @@ function updateEraMap(){
 }
 
 function triggerEvents(){
+    d3.select(".eventNotification").remove();
 
     var eventCount = 0;
 
@@ -714,16 +715,39 @@ function triggerEvents(){
                 .attr("class", function(){return "eventNotification " + eventData.type + "event " + "eventCount" + eventCount;})
                 .style("height", "8vh")
                 .style("width", "8vh")
-                .style("top", "-100px")
-                .style("left", "0.5vh");
-
+                .style("top", function(){return primaryMapHeight/-10 + "px";})
+                .style("left", "0.5vh")
+                .style("background-image", "url(img/event"+eventTable[i].type+".jpg)")
+                /*
+                * conquer: http://img09.deviantart.net/74a0/i/2014/241/c/f/sword_in_the_ground_by_taaks-d7x3gms.jpg
+                * resurface: http://www.phoenixtradingstrategies.com/wp-content/uploads/2014/09/Phoenix.jpg
+                * war: http://us.123rf.com/450wm/andreykuzmin/andreykuzmin1502/andreykuzmin150200118/37177744-medieval-knight-shield-and-crossed-swords-on-wooden-gate.jpg?ver=6
+                * */
+                .style("background-size", "contain")
+                .on("click", function(d, i){
+                    var eventId = d3.event.srcElement.id.slice(5);
+                    d3.select("#eventWindowCloseButton").attr("eventId", "event"+eventId);
+                    if(eventTable[eventId].image != "NULL") {
+                        d3.select("#eventWindowImage")
+                            .style("height", "30vh")
+                            .style("border", "3px groove #333333")
+                            .style("background-image", "url(img/"+eventTable[eventId].image+")");
+                    } else {
+                        d3.select("#eventWindowImage")
+                            .style("height", "0")
+                            .style("border", "0")
+                            .style("background-image", "none");
+                    }
+                    d3.select("#eventWindowTitle").html(eventTable[eventId].title);
+                    d3.select("#eventWindowDescription").html(eventTable[eventId].description);
+                    $('#eventModal').modal('show');
+                });
             event
                 .transition()
                 .delay((eventCount-1)*(eraChangeDuration/10))
                 .duration(eraChangeDuration/1.5)
                 .ease("linear")
                 .style("top", function(){
-                    console.log(80 - 8*eventCount);
                     return (80 - 8*eventCount)+"vh"
                 });
         }
@@ -731,5 +755,25 @@ function triggerEvents(){
 
 
     var events = d3.selectAll(".eventNotification")[0];
-    console.log(events);
 }
+
+d3.select("#eventWindowCloseButton").on("click", function(){
+    $('#eventModal').modal('hide');
+    var closedEvent = d3.select("#eventWindowCloseButton").attr("eventId")
+    d3.select("#"+closedEvent).remove();
+    var shiftedEvents = 0;
+    d3.selectAll(".eventNotification")[0].forEach(function(event){
+        if(event.id.slice(5) > closedEvent.slice(5)){
+            shiftedEvents++;
+            var eventSelect = d3.select("#"+event.id);
+            eventSelect
+                .transition()
+                .delay(100*shiftedEvents)
+                .duration(eraChangeDuration/15)
+                .ease("linear")
+                .style("top", function(){
+                    return (Math.floor(eventSelect.style("top").slice(0,-2))+Math.floor(eventSelect.style("height").slice(0,-2))) + "px";
+                });
+        }
+    });
+});

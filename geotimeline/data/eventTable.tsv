@@ -1,4 +1,6 @@
-id	era	type	image	description
-0	1	war	NULL	A war has started
-1	1	conquer	NULL	This nation no longer exists
-2	2	resurface	NULL	This nation regained its identity
+id	era	type	image	title	description
+0	1	War	eventWar.jpg	War!	A war has started
+1	1	Conquer	eventConquer.jpg	A loss	This nation no longer exists
+2	1	War	eventWar.jpg	War!	Another war has started
+3	1	Resurface	eventResurface.jpg	Resurgance!	This nation regained its identity
+4	1	Resurface	eventResurface.jpg	Resurgance!	Another nation regained its identity
