@@ -5,6 +5,7 @@
 var nationTable;
 var eraTable;
 var eventTable;
+var characterTable;
 var currentEra = 0;
 
 // Declare Map Path Variables
@@ -63,6 +64,7 @@ queue()
     .defer(d3.csv, "data/nationTable.csv")
     .defer(d3.tsv, "data/eraTable.tsv")
     .defer(d3.tsv, "data/eventTable.tsv")
+    .defer(d3.tsv, "data/characterTable.tsv")
     .await(loadInitialMapData);
 
 
@@ -70,12 +72,14 @@ queue()
 google.maps.event.addDomListener(window, 'load', initializeGoogleMap);
 
 
-function loadInitialMapData(error, nationData, eraData, eventData){
+function loadInitialMapData(error, nationData, eraData, eventData, characterData){
     nationTable = nationData;
     eraTable = eraData;
     eventTable = eventData;
+    characterTable = characterData;
     updateEraDate();
     updateEraSummary();
+    updateCharacters();
 
 
     queue()
@@ -623,6 +627,7 @@ function updateEra(){
 
     updateEraDate();
     updateEraSummary();
+    updateCharacters();
     triggerEvents();
 
 
@@ -777,3 +782,73 @@ d3.select("#eventWindowCloseButton").on("click", function(){
         }
     });
 });
+
+
+function updateCharacters(){
+
+    for(var i = 0; i < characterTable.length && characterTable[i].startEra <= currentEra; i++) {
+        var characterData = characterTable[i];
+        var character;
+
+        if (characterTable[i].endEra == currentEra) {
+            console.log("Kill " + characterTable[i].name);
+
+            var killedCharacter = d3.select("#character" + characterData.id)
+                .transition()
+                .duration(500)
+                .ease("linear")
+                .style("height", "1px")
+                .style("width", "1px")
+                .style("opacity", "0");
+            setTimeout(function(){killedCharacter.remove();}, 500)
+
+        }
+        if (characterTable[i].startEra == currentEra) {
+            console.log("Add " + characterTable[i].name);
+            var addedCharacter = d3.select("#characterSummaryBox").append("div")
+                .attr("id", function(){ return "character" + characterData.id;})
+                .attr("class", function(){return "characterThumbnailBox";})
+                //.style("height", characterSummaryBoxWidth + "px")
+                .style("width", (characterSummaryBoxWidth*0.8+6) + "px")
+                .style("top", characterSummaryBoxWidth*0.1 + "px")
+                .style("left", characterSummaryBoxWidth*0.1 + "px")
+                .style("opacity", "0");
+            addedCharacter
+                .append("div")
+                .attr("class", "characterThumbnail " + characterData.culture)
+                .style("height", characterSummaryBoxWidth*0.8 + "px")
+                .style("width", characterSummaryBoxWidth*0.8 + "px")
+                .style("background-image", "url(img/"+characterTable[i].image);
+            addedCharacter
+                .append("div")
+                .attr("class", "characterLabel")
+                .style("height", characterSummaryBoxWidth*0.2 + "px")
+                .style("width", characterSummaryBoxWidth*0.8 + "px")
+                .text(characterTable[i].name);
+
+                /*.on("click", function(d, i){
+                    var eventId = d3.event.srcElement.id.slice(5);
+                    d3.select("#eventWindowCloseButton").attr("eventId", "event"+eventId);
+                    if(eventTable[eventId].image != "NULL") {
+                        d3.select("#eventWindowImage")
+                            .style("height", "30vh")
+                            .style("border", "3px groove #333333")
+                            .style("background-image", "url(img/"+eventTable[eventId].image+")");
+                    } else {
+                        d3.select("#eventWindowImage")
+                            .style("height", "0")
+                            .style("border", "0")
+                            .style("background-image", "none");
+                    }
+                    d3.select("#eventWindowTitle").html(eventTable[eventId].title);
+                    d3.select("#eventWindowDescription").html(eventTable[eventId].description);
+                    $('#eventModal').modal('show');
+                }); */
+            addedCharacter
+                .transition()
+                .duration(1000)
+                .ease("linear")
+                .style("opacity", "1");
+        }
+    }
+}

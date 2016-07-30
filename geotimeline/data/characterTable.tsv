@@ -1,0 +1,4 @@
+id	startEra	endEra	image	name	description	culture
+0	0	1	characterJulianApostate.jpg	Emperor Julian the Apostate	The last pagan emperor of Rome	classical
+1	0	2	characterStilicho.jpg	Stilicho the Vandal	A Germanic general paid to fight for Rome	teutonic
+2	1	2	characterAlaric.jpg	King Alaric	A Germanic general that pillaged Rome	teutonic

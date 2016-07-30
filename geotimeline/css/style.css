@@ -116,55 +116,72 @@ html, body {
 }
 .altaian {
     fill: #985906;
+    border: 3px groove #985906;
 }
 .uralian {
     fill: #ffffff;
+    border: 3px groove #ffffff;
 }
 .celtic {
     fill: #ff9933;
+    border: 3px groove #ff9933;
 }
 .classical {
     fill: #ff6600;
+    border: 3px groove #ff6600;
 }
 .iranian {
     fill: #ffff00;
+    border: 3px groove #ffff00;
 }
 .slavic {
     fill: #000000;
     stroke: #666666;
+    border: 3px groove #000000;
 }
 .teutonic {
     fill: #b40000;
+    border: 3px groove #b40000;
 }
 .westernEuropean {
     fill: #ff1301;
+    border: 3px groove #ff1301;
 }
 .elamoDravidian {
     fill: #92D050;
+    border: 3px groove #92D050;
 }
 .afroAsiatic {
     fill: #016704;
+    border: 3px groove #016704;
 }
 .nigerCongolese {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .bantu {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .sinoThai {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .austronesian {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .papuanAustralian {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .americanIndian {
     fill: #000000;
+    border: 3px groove #b40000;
 }
 .misc {
     fill: #808080;
+    border: 3px groove #808080;
 }
 
 
@@ -303,6 +320,21 @@ html, body {
     box-shadow: 0 0 20px black;
     z-index: 3;
 }
+.characterThumbnailBox {
+    position: relative;
+
+}.characterThumbnail {
+     background-color: black;
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+ }
+.characterLabel {
+    position: relative;
+    height: auto;
+    text-align: center;
+    color: #ddddbb;
+}
 
 
 
@@ -362,3 +394,6 @@ html, body {
     margin: 0 10% 0 10%;
     font-size: large;
 }
+
+
+

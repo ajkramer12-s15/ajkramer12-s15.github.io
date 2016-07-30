@@ -20,7 +20,7 @@ id,name,culture,nation,nodes
 18,Getes,teutonic,1,36
 19,Swedes,teutonic,1,48
 20,Norse,teutonic,1,60
-21,Lapps,uralian,0,108
+21,Lapps,misc,0,108
 22,Finns,uralian,0,132
 23,Balts,slavic,1,36
 24,Slavs,slavic,1,60
