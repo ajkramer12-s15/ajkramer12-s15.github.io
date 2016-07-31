@@ -323,6 +323,7 @@ html, body {
 .characterThumbnailBox {
     position: relative;
 
+
 }.characterThumbnail {
      background-color: black;
      background-size: contain;
@@ -330,8 +331,6 @@ html, body {
      background-position: center;
  }
 .characterLabel {
-    position: relative;
-    height: auto;
     text-align: center;
     color: #ddddbb;
 }
@@ -365,32 +364,32 @@ html, body {
 }
 
 
-#eventWindow {
+#detailsWindow {
     background-color: palegoldenrod;
     background-image: url("../img/eventWindowBackground.jpg"); /* Personal Creation */
     background-size: cover;
 }
-#eventWindowClose {
+#detailsWindowClose {
     text-align: right;
 }
-#eventWindowCloseButton {
+#detailsWindowCloseButton {
     height: 5vh;
     width: 5vh;
 }
-#eventWindowImage {
+#detailsWindowImage {
     margin: 0 12% 25px 12%;
     background-color: #0f0703;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-#eventWindowTitle {
+#detailsWindowTitle {
     margin: 0 10% 10px 10%;
     text-align: center;
     font-family: "Cardinal", serif;
     font-size: xx-large;
 }
-#eventWindowDescription {
+#detailsWindowDescription {
     margin: 0 10% 0 10%;
     font-size: large;
 }

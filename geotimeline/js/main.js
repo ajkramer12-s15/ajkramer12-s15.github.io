@@ -61,7 +61,7 @@ var path = d3.geo.path()
 
 // Load map data
 queue()
-    .defer(d3.csv, "data/nationTable.csv")
+    .defer(d3.tsv, "data/nationTable.tsv")
     .defer(d3.tsv, "data/eraTable.tsv")
     .defer(d3.tsv, "data/eventTable.tsv")
     .defer(d3.tsv, "data/characterTable.tsv")
@@ -119,10 +119,23 @@ function initializeD3Map(error, previousMapData, currentMapData, nextMapData) {
         .enter().append("path")
         .attr("d", path)
         .attr("id", function(d){ return "region" + d.id;})
-        .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture});
+        .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture})
+        .on("click", function(d){
+            console.log("region" + d.id);
+            d3.select("#selectedRegionName").text(nationTable[d.id].name);
+            d3.select("#selectedRegionStats").html("<li>Culture: " + nationTable[d.id].culture + "</li><li>Religion: " + nationTable[d.id].religion + "</li><li>Eras in Existence: " + (currentEra - nationTable[d.id].yearFounded) + "</li>");
+            d3.select("#selectedRegionDescription").text(nationTable[d.id].description);
+        });
+
+    d3.select("#primaryMap")
+        .on("click", function(){
+            //d3.select("#selectedRegionName").text("");
+        })
 
     labelRegions(0);
     calculateRegionAreas();
+    toggleEraSummaryBox();
+    toggleCharacterSummaryBox();
 
 }
 function homogenizeNodeCount(mapData){
@@ -422,8 +435,6 @@ function viewBoxDragBehavior() {
 }
 function viewBoxDragRelease() {
     var vCenter = miniProjection.invert([d3.event.sourceEvent.offsetX, d3.event.sourceEvent.offsetY]);
-    console.log(vCenter);
-    console.log(d3.event.sourceEvent);
     // Update Primary Map
     projection.center(vCenter);
     googleMap.setCenter({lat: vCenter[1], lng: vCenter[0]});
@@ -539,24 +550,25 @@ var eraSummaryBoxHeight = eraSummaryBox.style("height").slice(0, -2);
 
 var eraSummaryBoxToggle = d3.select("#eraSummaryBoxToggle")
     .style("left", eraSummaryBoxWidth/2-(d3.select("#eraSummaryBoxToggle").style("width").slice(0, -2)/2) + "px")
-    .on("click", function(){
-        if(eraSummaryBoxOpen){
-            eraSummaryBox
-                .transition()
-                .duration(1500)
-                .style("top", primaryMapHeight + "px");
-            setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-up'></span>");}, 1500);
-            eraSummaryBoxOpen = false;
-        } else {
-            eraSummaryBox
-                .transition()
-                .duration(1500)
-                .style("top", (primaryMapHeight - eraSummaryBoxHeight) + "px");
-            setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-down'></span>");}, 1500);
-            eraSummaryBoxOpen = true;
-        }
+    .on("click", toggleEraSummaryBox);
 
-    });
+function toggleEraSummaryBox(){
+    if(eraSummaryBoxOpen){
+        eraSummaryBox
+            .transition()
+            .duration(1500)
+            .style("top", primaryMapHeight + "px");
+        setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-up'></span>");}, 1500);
+        eraSummaryBoxOpen = false;
+    } else {
+        eraSummaryBox
+            .transition()
+            .duration(1500)
+            .style("top", (primaryMapHeight - eraSummaryBoxHeight) + "px");
+        setTimeout(function(){eraSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-down'></span>");}, 1500);
+        eraSummaryBoxOpen = true;
+    }
+}
 
 
 /*
@@ -579,25 +591,25 @@ var characterSummaryBoxWidth = characterSummaryBox.style("width").slice(0, -2);
 
 var characterSummaryBoxToggle = d3.select("#characterSummaryBoxToggle")
     .style("top", characterSummaryBoxHeight/2-(d3.select("#characterSummaryBoxToggle").style("height").slice(0, -2)/2) + "px")
-    .on("click", function(){
-        if(characterSummaryBoxOpen){
-            characterSummaryBox
-                .transition()
-                .duration(1500)
-                .style("left", primaryMapWidth-5 + "px");
-            setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-left'></span>");}, 1500);
-            characterSummaryBoxOpen = false;
-        } else {
-            characterSummaryBox
-                .transition()
-                .duration(1500)
-                .style("left", (primaryMapWidth - characterSummaryBoxWidth) + "px");
-            setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-right'></span>");}, 1500);
-            characterSummaryBoxOpen = true;
-        }
+    .on("click", toggleCharacterSummaryBox);
 
-    });
-
+function toggleCharacterSummaryBox(){
+    if(characterSummaryBoxOpen){
+        characterSummaryBox
+            .transition()
+            .duration(1500)
+            .style("left", primaryMapWidth-5 + "px");
+        setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-left'></span>");}, 1500);
+        characterSummaryBoxOpen = false;
+    } else {
+        characterSummaryBox
+            .transition()
+            .duration(1500)
+            .style("left", (primaryMapWidth - characterSummaryBoxWidth) + "px");
+        setTimeout(function(){characterSummaryBoxToggle.html("<span class='glyphicon glyphicon-chevron-right'></span>");}, 1500);
+        characterSummaryBoxOpen = true;
+    }
+}
 
 
 
@@ -731,21 +743,21 @@ function triggerEvents(){
                 .style("background-size", "contain")
                 .on("click", function(d, i){
                     var eventId = d3.event.srcElement.id.slice(5);
-                    d3.select("#eventWindowCloseButton").attr("eventId", "event"+eventId);
+                    d3.select("#detailsWindowCloseButton").attr("eventId", "event"+eventId);
                     if(eventTable[eventId].image != "NULL") {
-                        d3.select("#eventWindowImage")
+                        d3.select("#detailsWindowImage")
                             .style("height", "30vh")
                             .style("border", "3px groove #333333")
                             .style("background-image", "url(img/"+eventTable[eventId].image+")");
                     } else {
-                        d3.select("#eventWindowImage")
+                        d3.select("#detailsWindowImage")
                             .style("height", "0")
                             .style("border", "0")
                             .style("background-image", "none");
                     }
-                    d3.select("#eventWindowTitle").html(eventTable[eventId].title);
-                    d3.select("#eventWindowDescription").html(eventTable[eventId].description);
-                    $('#eventModal').modal('show');
+                    d3.select("#detailsWindowTitle").html(eventTable[eventId].title);
+                    d3.select("#detailsWindowDescription").html(eventTable[eventId].description);
+                    $('#detailsModal').modal('show');
                 });
             event
                 .transition()
@@ -762,25 +774,27 @@ function triggerEvents(){
     var events = d3.selectAll(".eventNotification")[0];
 }
 
-d3.select("#eventWindowCloseButton").on("click", function(){
-    $('#eventModal').modal('hide');
-    var closedEvent = d3.select("#eventWindowCloseButton").attr("eventId")
-    d3.select("#"+closedEvent).remove();
-    var shiftedEvents = 0;
-    d3.selectAll(".eventNotification")[0].forEach(function(event){
-        if(event.id.slice(5) > closedEvent.slice(5)){
-            shiftedEvents++;
-            var eventSelect = d3.select("#"+event.id);
-            eventSelect
-                .transition()
-                .delay(100*shiftedEvents)
-                .duration(eraChangeDuration/15)
-                .ease("linear")
-                .style("top", function(){
-                    return (Math.floor(eventSelect.style("top").slice(0,-2))+Math.floor(eventSelect.style("height").slice(0,-2))) + "px";
-                });
-        }
-    });
+d3.select("#detailsWindowCloseButton").on("click", function(){
+    $('#detailsModal').modal('hide');
+    var closedElementId = d3.select("#detailsWindowCloseButton").attr("eventId");
+    if(closedElementId.slice(0, 5) == "event") {
+        d3.select("#" + closedElementId).remove();
+        var shiftedEvents = 0;
+        d3.selectAll(".eventNotification")[0].forEach(function (event) {
+            if (event.id.slice(5) > closedElementId.slice(5)) {
+                shiftedEvents++;
+                var eventSelect = d3.select("#" + event.id);
+                eventSelect
+                    .transition()
+                    .delay(100 * shiftedEvents)
+                    .duration(eraChangeDuration / 15)
+                    .ease("linear")
+                    .style("top", function () {
+                        return (Math.floor(eventSelect.style("top").slice(0, -2)) + Math.floor(eventSelect.style("height").slice(0, -2))) + "px";
+                    });
+            }
+        });
+    }
 });
 
 
@@ -791,8 +805,6 @@ function updateCharacters(){
         var character;
 
         if (characterTable[i].endEra == currentEra) {
-            console.log("Kill " + characterTable[i].name);
-
             var killedCharacter = d3.select("#character" + characterData.id)
                 .transition()
                 .duration(500)
@@ -804,15 +816,32 @@ function updateCharacters(){
 
         }
         if (characterTable[i].startEra == currentEra) {
-            console.log("Add " + characterTable[i].name);
             var addedCharacter = d3.select("#characterSummaryBox").append("div")
                 .attr("id", function(){ return "character" + characterData.id;})
                 .attr("class", function(){return "characterThumbnailBox";})
-                //.style("height", characterSummaryBoxWidth + "px")
+                .style("margin-bottom", characterSummaryBoxWidth*0.1 + "px")
                 .style("width", (characterSummaryBoxWidth*0.8+6) + "px")
                 .style("top", characterSummaryBoxWidth*0.1 + "px")
                 .style("left", characterSummaryBoxWidth*0.1 + "px")
-                .style("opacity", "0");
+                .style("opacity", "0")
+                .on("click", function(d, i){
+                    var characterId = characterData.id;
+                    d3.select("#detailsWindowCloseButton").attr("eventId", "character"+characterId);
+                    if(characterTable[characterId].image != "NULL") {
+                        d3.select("#detailsWindowImage")
+                            .style("height", "30vh")
+                            .style("border", "3px groove #333333")
+                            .style("background-image", "url(img/"+characterTable[characterId].image+")");
+                    } else {
+                        d3.select("#detailsWindowImage")
+                            .style("height", "0")
+                            .style("border", "0")
+                            .style("background-image", "none");
+                    }
+                    d3.select("#detailsWindowTitle").html(characterTable[characterId].name);
+                    d3.select("#detailsWindowDescription").html(characterTable[characterId].description);
+                    $('#detailsModal').modal('show');
+                });
             addedCharacter
                 .append("div")
                 .attr("class", "characterThumbnail " + characterData.culture)
@@ -822,28 +851,8 @@ function updateCharacters(){
             addedCharacter
                 .append("div")
                 .attr("class", "characterLabel")
-                .style("height", characterSummaryBoxWidth*0.2 + "px")
                 .style("width", characterSummaryBoxWidth*0.8 + "px")
                 .text(characterTable[i].name);
-
-                /*.on("click", function(d, i){
-                    var eventId = d3.event.srcElement.id.slice(5);
-                    d3.select("#eventWindowCloseButton").attr("eventId", "event"+eventId);
-                    if(eventTable[eventId].image != "NULL") {
-                        d3.select("#eventWindowImage")
-                            .style("height", "30vh")
-                            .style("border", "3px groove #333333")
-                            .style("background-image", "url(img/"+eventTable[eventId].image+")");
-                    } else {
-                        d3.select("#eventWindowImage")
-                            .style("height", "0")
-                            .style("border", "0")
-                            .style("background-image", "none");
-                    }
-                    d3.select("#eventWindowTitle").html(eventTable[eventId].title);
-                    d3.select("#eventWindowDescription").html(eventTable[eventId].description);
-                    $('#eventModal').modal('show');
-                }); */
             addedCharacter
                 .transition()
                 .duration(1000)

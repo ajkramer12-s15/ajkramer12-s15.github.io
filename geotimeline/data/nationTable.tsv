@@ -1,0 +1,44 @@
+id	name	culture	description	religion	yearFounded	nation	nodes
+0	Jutes	teutonic	Germanic Tribe	Pagan	0	1	24
+1	Angles	teutonic	Germanic Tribe	Pagan	0	1	12
+2	Frisians	teutonic	Germanic Tribe	Pagan	0	1	12
+3	Franks	teutonic	Germanic Tribe	Pagan	0	1	36
+4	Saxons	teutonic	Germanic Tribe	Pagan	0	1	48
+5	Lombards	teutonic	Germanic Tribe	Pagan	0	1	24
+6	Burgundians	teutonic	Germanic Tribe	Pagan	0	1	12
+7	Thuringians	teutonic	Germanic Tribe	Pagan	0	1	36
+8	Alemanni	teutonic	Germanic Tribe	Pagan	0	1	24
+9	Marco-manni	teutonic	Germanic Tribe	Pagan	0	1	24
+10	Siling Vandals	teutonic	Germanic Tribe	Pagan	0	1	24
+11	Quadi	teutonic	Germanic Tribe	Pagan	0	1	24
+12	Asding Vandals	teutonic	Germanic Tribe	Pagan	0	1	36
+13	Gepids	teutonic	Germanic Tribe	Pagan	0	1	48
+14	Rugians	teutonic	Germanic Tribe	Pagan	0	1	48
+15	Visgoths	teutonic	Germanic Tribe	Pagan	0	1	84
+16	Ostrogoths	teutonic	Germanic Tribe	Pagan	0	1	96
+17	Danes	teutonic	Germanic Tribe	Pagan	0	1	36
+18	Getes	teutonic	Germanic Tribe	Pagan	0	1	36
+19	Swedes	teutonic	Germanic Tribe	Pagan	0	1	48
+20	Norse	teutonic	Germanic Tribe	Pagan	0	1	60
+21	Lapps	misc	Ancient nomadic people	Pagan	0	0	108
+22	Finns	uralian	Nomadic people	Pagan	0	0	132
+23	Balts	slavic	Slavic Tribe	Pagan	0	1	36
+24	Slavs	slavic	Slavic Tribe	Pagan	0	1	60
+25	Roman Empire	classical	Giant Empire	Christian	0	1	204
+26	Picts	celtic	Celtic Tribes	Pagan	0	1	60
+27	Irish	celtic	Celtic Tribes	Pagan	0	1	72
+28	Abasgians	misc	Caucasian people	Pagan	0	1	12
+29	Kingdom of Lazica	misc	Caucasian Kingdom	Christian	0	1	24
+30	Kingdom of Iberia	misc	Caucasian Kingdom	Christian	0	1	36
+31	Kingdom of Armenia	misc	Caucasian Kingdom	Christian	0	1	48
+32	Berbers	afroAsiatic	North Saharan Tribes	Pagan	0	1	48
+33	Arabs	afroAsiatic	Arabian Tribes	Pagan	0	0	84
+34	Persian Empire	iranian	Rome's primary rival	Zoroastrian	0	1	120
+35	Alans	iranian	A resiliant culture similar to Persia	Pagan	0	1	60
+36	Kushan Principalities	iranian	An ancient culture that bridged the East and the West	Buddhist	0	1	72
+37	Huns	altaian	Fierce nomadic warrior tribes	Pagan	0	1	108
+38	British	celtic	Celtic Tribes	Pagan	1	1	24
+39	Suevi & Vandals	teutonic	"A coalition of Marco-manni, Quadi, and Siling and Asding Vandal tribes"	Pagan	1	1	24
+40	White Huns	altaian	A sub-group of the Huns	Pagan	0	1	108
+41	Khwarizm	iranian	People near a lake	Pagan	0	1	24
+42	Brahui	elamoDravidian	Last bastion of the Elamo-Dravidian culture group	Pagan	0	1	36

@@ -21,7 +21,19 @@
                 <svg id="miniMap"></svg>
             </div>
             <div id="primaryCommand" class="col-sm-7 col-xs-12 commandBoxElements">
-
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="selectedRegionName"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul id="selectedRegionStats"></ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="selectedRegionDescription"></div>
+                    </div>
+                </div>
             </div>
             <div id="statsBox" class="col-sm-3 hidden-xs commandBoxElements">
                 <h4 id="grandEraLabel">Dark Ages</h4>
@@ -46,15 +58,15 @@
     </div>
 
 
-    <!-- Event Modal Window -->
-    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventWindowTitle">
+    <!-- Details Modal Window -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsWindowTitle">
         <div class="modal-dialog" role="document">
-            <div id="eventWindow" class="modal-content">
+            <div id="detailsWindow" class="modal-content">
                 <div class="modal-body">
-                    <div id="eventWindowClose"><img id="eventWindowCloseButton" src="img/close.png"></div> <!-- https://thumbs.dreamstime.com/m/blank-wax-seal-3094026.jpg -->
-                    <div id="eventWindowImage"></div>
-                    <div id="eventWindowTitle"></div>
-                    <div id="eventWindowDescription"></div>
+                    <div id="detailsWindowClose"><img id="detailsWindowCloseButton" src="img/close.png"></div> <!-- https://thumbs.dreamstime.com/m/blank-wax-seal-3094026.jpg -->
+                    <div id="detailsWindowImage"></div>
+                    <div id="detailsWindowTitle"></div>
+                    <div id="detailsWindowDescription"></div>
                 </div>
             </div>
         </div>
