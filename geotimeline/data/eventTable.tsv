@@ -1,6 +1,16 @@
-id	era	type	image	title	description
-0	1	War	eventWar.jpg	War!	A war has started
-1	1	Conquer	eventConquer.jpg	A loss	This nation no longer exists
-2	1	War	eventWar.jpg	War!	Another war has started
-3	1	Resurface	eventResurface.jpg	Resurgance!	This nation regained its identity
-4	1	Resurface	eventResurface.jpg	Resurgance!	Another nation regained its identity
+id	era	type	image	title	subTitle	description
+0	1	War	eventWar.jpg	War!	The Hun Invasion	"When the Ostrogoths try to expand their territory into regions controlled by the Huns, the Huns respond by exploding into Eastern Europe. Most of the Teutonic tribes are enslaved, forced to give up land, or flee to Rome for sanctuary."
+1	1	Conquer	eventConquer.jpg	A loss	Alans	Enslaved by the Huns
+2	1	Conquer	eventConquer.jpg	A loss	Ostrogoths	Enslaved by the Huns
+3	1	Vassal	eventVassal.jpg	Vassalage	Visgoths	"The Visgoths are granted land in Rome as they flee the Huns. However, they soon become unhappy with the arrangments..."
+4	1	Conquer	eventConquer.jpg	A loss	Gepids	Enslaved by the Huns
+5	1	Conquer	eventConquer.jpg	A loss	Khwarizm	Enslaved by the White Huns
+6	1	Conquer	eventConquer.jpg	A loss	Brahui	Enslaved by the White Huns
+7	1	Coalition	eventCoalition.jpg	Coalition	The Suvei & Vandals	"Pursued by the Huns, the Marco-manni, Quadi, & Siling and Asing Vandals join forces before fleeing to Rome"
+8	1	Vassal	eventVassal.jpg	Vassalage	The Suvei & Vandals	"Unable to stop the onslaught of the Huns, the Suvei & Vandal coalition appeal to Rome for sanctuary."
+9	1	Battle	eventBattle.jpg	Battle of Adrianople		"The combined Visgoth and remnant Ostrogoth cavalries crush the Roman legions, marking the end of Rome's military dominance in Europe"
+10	1	Resurface	eventResurface.jpg	Resurgance!	British	The British peoples regain their political identity as Rome begins to pull out of Brittania.
+11	1	Independence	eventIndependence.jpg	Independence!	Kingdom of Iberia	To ease conflicts with Persia in order to respond to events in the North; Rome agrees to give the Kingdom of Iberia its independence.
+12	1	Independence	eventIndependence.jpg	Independence!	Kingdom of Armenia	To ease conflicts with Persia in order to respond to events in the North; Rome agrees to give the Kingdom of Armenia its independence.
+13	1	War	eventWar.jpg	War!	Slavic Expansion	"As the Huns overrun the Teutonic world, the Slavs edge westward, taking advantage of the chaos"
+14	1	Conquer	eventConquer.jpg	A loss	Lombards	Overrun by the Slavs

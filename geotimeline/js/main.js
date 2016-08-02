@@ -42,6 +42,10 @@ var primaryMap = d3.select("#primaryMap")
 var googleMap;
 
 
+// Load Audio
+var nextEraAudio = new Audio('audio/nextEra.mp3');
+
+
 
 
 /* Constructor Calls & Functions */
@@ -50,6 +54,7 @@ var googleMap;
 
 // Set projection path
 var projection = d3.geo.mercator()
+//var projection = d3.geo.equirectangular()
     //.translate([primaryMapWidth / 2, primaryMapHeight / 1.43])
     .center([0, 30])
     .translate([longitude, latitude])
@@ -120,17 +125,14 @@ function initializeD3Map(error, previousMapData, currentMapData, nextMapData) {
         .attr("d", path)
         .attr("id", function(d){ return "region" + d.id;})
         .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture})
-        .on("click", function(d){
-            console.log("region" + d.id);
-            d3.select("#selectedRegionName").text(nationTable[d.id].name);
-            d3.select("#selectedRegionStats").html("<li>Culture: " + nationTable[d.id].culture + "</li><li>Religion: " + nationTable[d.id].religion + "</li><li>Eras in Existence: " + (currentEra - nationTable[d.id].yearFounded) + "</li>");
-            d3.select("#selectedRegionDescription").text(nationTable[d.id].description);
-        });
+        .on("click", function(d){updateRegionStats(d);});
 
     d3.select("#primaryMap")
         .on("click", function(){
-            //d3.select("#selectedRegionName").text("");
-        })
+            if(d3.event.path[0].id == "primaryMap"){
+                updateRegionStats(-1);
+            }
+        });
 
     labelRegions(0);
     calculateRegionAreas();
@@ -154,10 +156,29 @@ function homogenizeNodeCount(mapData){
             }
             homogenizedMapData[region].geometry.coordinates[0] = homogenizedRegionData;
         }
-        //console.log(homogenizedMapData[region].id + ": " + (targetRegionNodeNumber - homogenizedMapData[region].geometry.coordinates[0].length));
     }
 
     return homogenizedMapData;
+}
+function updateRegionStats(d){
+    if(d == -1){
+        d3.select("#selectedRegionName").attr("regionId", -1);
+        d3.select("#selectedRegionName").text("");
+        d3.select("#selectedRegionStats").html("");
+        d3.select("#selectedRegionDescription").text("");
+    } else if(d == 0){
+        var regionId = d3.select("#selectedRegionName").attr("regionId");
+        if(regionId > -1){
+            d3.select("#selectedRegionName").text(nationTable[regionId].name);
+            d3.select("#selectedRegionStats").html("<li>Culture: " + nationTable[regionId].culture.charAt(0).toUpperCase() + nationTable[regionId].culture.slice(1) + "</li><li>Religion: " + nationTable[regionId].religion + "</li><li>Eras in Existence: " + (currentEra - nationTable[regionId].yearFounded) + "</li>");
+            d3.select("#selectedRegionDescription").text(nationTable[regionId].description);
+        }
+    } else {
+        d3.select("#selectedRegionName").attr("regionId", d.id);
+        d3.select("#selectedRegionName").text(nationTable[d.id].name);
+        d3.select("#selectedRegionStats").html("<li>Culture: " + nationTable[d.id].culture.charAt(0).toUpperCase() + nationTable[d.id].culture.slice(1) + "</li><li>Religion: " + nationTable[d.id].religion + "</li><li>Eras in Existence: " + (currentEra - nationTable[d.id].yearFounded) + "</li>");
+        d3.select("#selectedRegionDescription").text(nationTable[d.id].description);
+    }
 }
 function labelRegions(duration){
 
@@ -626,6 +647,7 @@ d3.select("#nextArrow")
 
 function updateEra(){
 
+    nextEraAudio.play();
     updateEraMap();
     setTimeout(calculateRegionAreas, eraChangeDuration);
 
@@ -639,6 +661,7 @@ function updateEra(){
 
     updateEraDate();
     updateEraSummary();
+    updateRegionStats(0);
     updateCharacters();
     triggerEvents();
 
@@ -701,7 +724,8 @@ function updateEraMap(){
                 .attr("d", path)
                 .attr("id", function(d){ return "region" + d.id;})
                 .attr("class", function(d){return "primaryMapRegion " + nationTable[d.id].culture})
-                .style("opacity","0");
+                .style("opacity","0")
+                .on("click", function(d){updateRegionStats(d);});
         }
         found = false;
     }
@@ -781,7 +805,7 @@ d3.select("#detailsWindowCloseButton").on("click", function(){
         d3.select("#" + closedElementId).remove();
         var shiftedEvents = 0;
         d3.selectAll(".eventNotification")[0].forEach(function (event) {
-            if (event.id.slice(5) > closedElementId.slice(5)) {
+            if (+event.id.slice(5) > +closedElementId.slice(5)) {
                 shiftedEvents++;
                 var eventSelect = d3.select("#" + event.id);
                 eventSelect
@@ -825,7 +849,7 @@ function updateCharacters(){
                 .style("left", characterSummaryBoxWidth*0.1 + "px")
                 .style("opacity", "0")
                 .on("click", function(d, i){
-                    var characterId = characterData.id;
+                    var characterId = d3.event.srcElement.id.slice(18);
                     d3.select("#detailsWindowCloseButton").attr("eventId", "character"+characterId);
                     if(characterTable[characterId].image != "NULL") {
                         d3.select("#detailsWindowImage")
@@ -844,6 +868,7 @@ function updateCharacters(){
                 });
             addedCharacter
                 .append("div")
+                .attr("id", "characterThumbnail"+characterData.id)
                 .attr("class", "characterThumbnail " + characterData.culture)
                 .style("height", characterSummaryBoxWidth*0.8 + "px")
                 .style("width", characterSummaryBoxWidth*0.8 + "px")

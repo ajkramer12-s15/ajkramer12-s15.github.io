@@ -36,9 +36,9 @@ id	name	culture	description	religion	yearFounded	nation	nodes
 34	Persian Empire	iranian	Rome's primary rival	Zoroastrian	0	1	120
 35	Alans	iranian	A resiliant culture similar to Persia	Pagan	0	1	60
 36	Kushan Principalities	iranian	An ancient culture that bridged the East and the West	Buddhist	0	1	72
-37	Huns	altaian	Fierce nomadic warrior tribes	Pagan	0	1	108
+37	Huns	altaian	Fierce nomadic warrior tribes	Pagan	0	1	120
 38	British	celtic	Celtic Tribes	Pagan	1	1	24
 39	Suevi & Vandals	teutonic	"A coalition of Marco-manni, Quadi, and Siling and Asding Vandal tribes"	Pagan	1	1	24
-40	White Huns	altaian	A sub-group of the Huns	Pagan	0	1	108
+40	White Huns	altaian	A sub-group of the Huns	Pagan	0	1	120
 41	Khwarizm	iranian	People near a lake	Pagan	0	1	24
 42	Brahui	elamoDravidian	Last bastion of the Elamo-Dravidian culture group	Pagan	0	1	36

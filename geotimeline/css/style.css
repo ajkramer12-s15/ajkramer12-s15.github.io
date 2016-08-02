@@ -217,6 +217,10 @@ html, body {
     color: #ddddbb;
 
 }
+.commandBoxElements {
+    height: 100%;
+}
+
 
 #miniMapColumn {
     padding: 15px 0 5px 0;
@@ -226,14 +230,18 @@ html, body {
     fill: #ffffbb;
 }
 
+
 #primaryCommand {
     border-left: 5px groove saddlebrown;
     border-right: 5px groove saddlebrown;
 }
-
-.commandBoxElements {
-    height: 100%;
+#selectedRegionName {
+    margin: 2vh 0 1vh 0;
+    font-family: "Charlemagne", serif;
+    font-size: 2vh;
 }
+
+
 
 #grandEraLabel {
     margin: 1vh 0 1vh 0;
