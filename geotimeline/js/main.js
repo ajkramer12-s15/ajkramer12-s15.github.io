@@ -42,8 +42,11 @@ var primaryMap = d3.select("#primaryMap")
 var googleMap;
 
 
-// Load Audio
-var nextEraAudio = new Audio('audio/nextEra.mp3');
+// Declare Audio
+var backgroundMusic;
+var nextEraAudio;
+var eventBattleAudio;
+var eventConquerAudio;
 
 
 
@@ -136,9 +139,36 @@ function initializeD3Map(error, previousMapData, currentMapData, nextMapData) {
 
     labelRegions(0);
     calculateRegionAreas();
+
+
+    queue()
+        .defer(loadAudio)
+        .await(startPage);
+
+
+
+}
+function loadAudio(callback) {
+    backgroundMusic = new Audio('audio/backgroundMusic.mp3'); // https://www.youtube.com/watch?v=u01Dk8O53JQ
+    nextEraAudio = new Audio('audio/nextEra.mp3'); // https://www.youtube.com/watch?v=aEaniKgfRRY
+    eventBattleAudio = new Audio('audio/eventBattle.mp3'); // https://www.youtube.com/watch?v=rhFkafqZj58
+    eventConquerAudio = new Audio('audio/eventConquer.mp3'); // https://www.youtube.com/watch?v=JSNlNMnsPn0
+
+    callback(null);
+    console.log("done");
+}
+function startPage(error){
+    console.log("done");
     toggleEraSummaryBox();
     toggleCharacterSummaryBox();
-
+    d3.select("#loadScreen")
+        .transition()
+        .duration(5000)
+        .style("opacity", "0");
+    backgroundMusic.play();
+    setTimeout(function(){
+        d3.select("#loadScreen").remove();
+    }, 4000);
 }
 function homogenizeNodeCount(mapData){
 
@@ -760,8 +790,12 @@ function triggerEvents(){
                 .style("left", "0.5vh")
                 .style("background-image", "url(img/event"+eventTable[i].type+".jpg)")
                 /*
+                * battle: http://cdn.pcwallart.com/images/fantasy-medieval-battle-art-wallpaper-3.jpg
+                * coalition: http://alison-morton.com/wp-content/uploads/2015/04/Roman-handshake.jpg
                 * conquer: http://img09.deviantart.net/74a0/i/2014/241/c/f/sword_in_the_ground_by_taaks-d7x3gms.jpg
+                * independence: http://kaposiadays.org/wp-content/uploads/fireworks-file1.jpg
                 * resurface: http://www.phoenixtradingstrategies.com/wp-content/uploads/2014/09/Phoenix.jpg
+                * vassal: http://awoiaf.westeros.org/images/thumb/6/69/Davos_Kneeling_King_Stannis.jpg/350px-Davos_Kneeling_King_Stannis.jpg
                 * war: http://us.123rf.com/450wm/andreykuzmin/andreykuzmin1502/andreykuzmin150200118/37177744-medieval-knight-shield-and-crossed-swords-on-wooden-gate.jpg?ver=6
                 * */
                 .style("background-size", "contain")
@@ -780,8 +814,14 @@ function triggerEvents(){
                             .style("background-image", "none");
                     }
                     d3.select("#detailsWindowTitle").html(eventTable[eventId].title);
+                    d3.select("#detailsWindowSubTitle").html(eventTable[eventId].subTitle);
                     d3.select("#detailsWindowDescription").html(eventTable[eventId].description);
                     $('#detailsModal').modal('show');
+                    if(eventTable[eventId].type == "Battle"){
+                        eventBattleAudio.play();
+                    } else if(eventTable[eventId].type == "Conquer") {
+                        eventConquerAudio.play();
+                    }
                 });
             event
                 .transition()
@@ -862,7 +902,8 @@ function updateCharacters(){
                             .style("border", "0")
                             .style("background-image", "none");
                     }
-                    d3.select("#detailsWindowTitle").html(characterTable[characterId].name);
+                    d3.select("#detailsWindowTitle").html("");
+                    d3.select("#detailsWindowSubTitle").html(characterTable[characterId].name);
                     d3.select("#detailsWindowDescription").html(characterTable[characterId].description);
                     $('#detailsModal').modal('show');
                 });

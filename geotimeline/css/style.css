@@ -44,6 +44,22 @@ html, body {
 
 
 /*
+* Load Screen
+*/
+#loadScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    background-color: #110000;
+    background-image: url("../img/loadScreen.jpg"); /* https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjwyaHyxKTOAhWGWj4KHV_rAxYQjBwIBA&url=http%3A%2F%2Fwallpaperstock.net%2Fmedieval-2%253A-total-war-wallpapers_19438_1366x768.jpg&psig=AFQjCNFTyDLf42VZZzX3Xsv2nPjxnTgqQw&ust=1470289368406707 */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/*
 ** Primary Map Styling
 */
 .primaryMapContainer {
@@ -392,13 +408,20 @@ html, body {
     background-position: center;
 }
 #detailsWindowTitle {
-    margin: 0 10% 10px 10%;
+    margin: 0 10% 5px 10%;
     text-align: center;
     font-family: "Cardinal", serif;
     font-size: xx-large;
 }
+#detailsWindowSubTitle {
+    margin: 0 10% 10px 10%;
+    text-align: center;
+    font-family: "Charlemagne", serif;
+    font-size: large;
+}
 #detailsWindowDescription {
     margin: 0 10% 0 10%;
+    text-align: center;
     font-size: large;
 }
 
