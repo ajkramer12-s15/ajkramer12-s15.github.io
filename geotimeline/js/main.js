@@ -150,6 +150,7 @@ function initializeD3Map(error, previousMapData, currentMapData, nextMapData) {
 }
 function loadAudio(callback) {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3'); // https://www.youtube.com/watch?v=u01Dk8O53JQ
+    backgroundMusic.loop = true;
     nextEraAudio = new Audio('audio/nextEra.mp3'); // https://www.youtube.com/watch?v=aEaniKgfRRY
     eventBattleAudio = new Audio('audio/eventBattle.mp3'); // https://www.youtube.com/watch?v=rhFkafqZj58
     eventConquerAudio = new Audio('audio/eventConquer.mp3'); // https://www.youtube.com/watch?v=JSNlNMnsPn0
@@ -679,15 +680,19 @@ function updateEra(){
 
     nextEraAudio.play();
     updateEraMap();
-    setTimeout(calculateRegionAreas, eraChangeDuration);
+
 
     previousEraBoundaries = currentEraBoundaries;
     currentEraBoundaries = previousEraBoundaries;
+
+    setTimeout(calculateRegionAreas, eraChangeDuration);
+
+    currentEra++;
+
     queue()
         .defer(d3.json, "data/" + getJsonFilename(1) + ".json")
         .await(updateEraMapWrapup);
 
-    currentEra++;
 
     updateEraDate();
     updateEraSummary();
@@ -876,7 +881,7 @@ function updateCharacters(){
                 .style("height", "1px")
                 .style("width", "1px")
                 .style("opacity", "0");
-            setTimeout(function(){killedCharacter.remove();}, 500)
+            setTimeout(function(){killedCharacter.remove();}, 500);
 
         }
         if (characterTable[i].startEra == currentEra) {
